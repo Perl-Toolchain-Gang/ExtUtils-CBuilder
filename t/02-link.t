@@ -2,7 +2,13 @@
 
 use strict;
 use Test;
-BEGIN { plan tests => 5 }
+BEGIN { 
+  if ($^O eq 'MSWin32') {
+    print "1..0 # Skipped: link_executable() is not implemented yet on Win32\n";
+    exit;
+  }
+  plan tests => 5;
+}
 
 use ExtUtils::CBuilder;
 use File::Spec;
