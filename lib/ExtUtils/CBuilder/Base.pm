@@ -55,6 +55,16 @@ sub arg_object_file {
   return ('-o', $file);
 }
 
+sub arg_share_object_file {
+  my ($self, $file) = @_;
+  return ($self->split_like_shell($self->{config}{lddlflags}), '-o', $file);
+}
+
+sub arg_exec_file {
+  my ($self, $file) = @_;
+  return ('-o', $file);
+}
+
 sub compile {
   my ($self, %args) = @_;
   die "Missing 'source' argument to compile()" unless defined $args{source};
@@ -173,10 +183,10 @@ sub _do_link {
 		   dl_name => $args{module_name}) if $self->need_prelink;
   
   my @linker_flags = $self->split_like_shell($args{extra_linker_flags});
-  my @lddlflags = $args{lddl} ? $self->split_like_shell($cf->{lddlflags}) : ();
+  my @output = $args{lddl} ? $self->arg_share_object_file($out) : $self->arg_exec_file($out);
   my @shrp = $self->split_like_shell($cf->{shrpenv});
   my @ld = $self->split_like_shell($cf->{ld});
-  $self->do_system(@shrp, @ld, @lddlflags, '-o', $out, @$objects, @linker_flags)
+  $self->do_system(@shrp, @ld, @output, @$objects, @linker_flags)
     or die "error building $out from @$objects";
   
   return wantarray ? ($out, @temp_files) : $out;
