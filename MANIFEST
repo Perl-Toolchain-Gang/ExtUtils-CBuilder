@@ -4,4 +4,12 @@ INSTALL
 MANIFEST			This list of files
 Makefile.PL
 lib/ExtUtils/CBuilder.pm
+lib/ExtUtils/CBuilder/Base.pm
+lib/ExtUtils/CBuilder/Platform/Unix.pm
+lib/ExtUtils/CBuilder/Platform/VMS.pm
+lib/ExtUtils/CBuilder/Platform/Windows.pm
+lib/ExtUtils/CBuilder/Platform/aix.pm
+lib/ExtUtils/CBuilder/Platform/cygwin.pm
+lib/ExtUtils/CBuilder/Platform/darwin.pm
+lib/ExtUtils/CBuilder/Platform/os2.pm
 t/01-basic.t
