@@ -131,7 +131,7 @@ sub link {
   
   my @temp_files = 
     $self->prelink(%args,
-		   dl_name => $args{module_name}) if $self->objects;
+		   dl_name => $args{module_name}) if $self->need_prelink;
   
   my @linker_flags = $self->split_like_shell($args{extra_linker_flags});
   my @lddlflags = $self->split_like_shell($cf->{lddlflags});
