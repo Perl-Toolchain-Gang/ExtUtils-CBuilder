@@ -25,7 +25,7 @@ sub arg_exec_file {
   return ("/exe=$file");
 }
 
-sub arg_shared_object_file {
+sub arg_share_object_file {
   my ($self, $file) = @_;
   return ("$self->{config}{lddlflags}=$file");
 }
