@@ -5,12 +5,11 @@ WriteMakefile
           'NAME' => 'ExtUtils::CBuilder',
           'VERSION_FROM' => 'lib/ExtUtils/CBuilder.pm',
           'PREREQ_PM' => {
-                           'File::Spec' => 0,
-                           'File::Basename' => 0,
-                           'Test' => 0
+                           'File::Basename' => '0',
+                           'File::Spec' => '0',
+                           'Test' => '0'
                          },
           'INSTALLDIRS' => 'site',
-          'PL_FILES' => {},
-          'NO_META' => 1,
+          'PL_FILES' => {}
         )
 ;
