@@ -1,6 +1,6 @@
 --- #YAML:1.0
 name: ExtUtils-CBuilder
-version: 0.03
+version: 0.04
 author:
   - Ken Williams, kwilliams@cpan.org
 abstract: Compile and link C code for Perl modules
@@ -8,12 +8,13 @@ license: perl
 requires:
   File::Basename: 0
   File::Spec: 0
+  Text::ParseWords: 0
 build_requires:
   Test: 0
 provides:
   ExtUtils::CBuilder:
     file: lib/ExtUtils/CBuilder.pm
-    version: 0.03
+    version: 0.04
   ExtUtils::CBuilder::Base:
     file: lib/ExtUtils/CBuilder/Base.pm
     version: 0.00_01
@@ -37,4 +38,4 @@ provides:
     file: lib/ExtUtils/CBuilder/Platform/darwin.pm
   ExtUtils::CBuilder::Platform::os2:
     file: lib/ExtUtils/CBuilder/Platform/os2.pm
-generated_by: Module::Build version 0.25
+generated_by: Module::Build version 0.26

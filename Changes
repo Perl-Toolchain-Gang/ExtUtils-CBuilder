@@ -1,11 +1,19 @@
 Revision history for Perl extension ExtUtils::CBuilder.
 
+0.04
+
+ - Changed the split_like_shell() method to use the shellwords()
+   function from Text::ParseWords (a core module since 5.0), which
+   does a much better job than the split() we were using.
+
+
 0.03  Fri May 14 23:12:23 CDT 2004
 
  - Fixed minor problems with the Build.PL file, the module names
    should be quoted.
 
  - The VMS module declared itself with the wrong package name.
+
 
 0.02  Fri Feb 20 10:17:40 CST 2004
 
@@ -15,6 +23,7 @@ Revision history for Perl extension ExtUtils::CBuilder.
  - Fixed a bug in .../Platform/Windows.pm, in which output files were
    being created in the root directory \ when they should be created
    in the current directory. [Randy Sims]
+
 
 0.01  Mon Jan 12 08:12:35 CST 2004
 

@@ -7,7 +7,8 @@ WriteMakefile
           'PREREQ_PM' => {
                            'File::Basename' => '0',
                            'File::Spec' => '0',
-                           'Test' => '0'
+                           'Test' => '0',
+                           'Text::ParseWords' => '0'
                          },
           'INSTALLDIRS' => 'site',
           'PL_FILES' => {}
