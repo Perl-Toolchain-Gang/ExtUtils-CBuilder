@@ -3,7 +3,6 @@ package ExtUtils::CBuilder::Base;
 use strict;
 use File::Spec;
 use File::Basename;
-use IO::File;
 use Config;
 use Text::ParseWords;
 
@@ -75,8 +74,10 @@ sub have_compiler {
   
   my $tmpfile = File::Spec->catfile(File::Spec->tmpdir, 'compilet.c');
   {
-    my $fh = IO::File->new("> $tmpfile") or die "Can't create $tmpfile: $!";
-    print $fh "int boot_compilet() { return 1; }\n";
+    local *FH;
+    open FH, "> $tmpfile" or die "Can't create $tmpfile: $!";
+    print FH "int boot_compilet() { return 1; }\n";
+    close FH;
   }
 
   my ($obj_file, @lib_files);
