@@ -1,4 +1,4 @@
-package ExtUtils::CBuilder::Base;
+package ExtUtils::CBuilder::Platform::VMS;
 
 use strict;
 use ExtUtils::CBuilder::Base;
