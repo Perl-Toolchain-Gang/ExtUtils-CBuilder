@@ -1,6 +1,6 @@
 Revision history for Perl extension ExtUtils::CBuilder.
 
-0.04
+0.04  Sun Oct 10 00:31:08 CDT 2004
 
  - Changed the split_like_shell() method to use the shellwords()
    function from Text::ParseWords (a core module since 5.0), which
