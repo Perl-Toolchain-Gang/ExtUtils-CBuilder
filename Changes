@@ -6,6 +6,8 @@ Revision history for Perl extension ExtUtils::CBuilder.
    creating an empty word, manifesting as something like "gcc - no
    such file or directory" during tests. [Spotted by Warren L. Dodge]
 
+ - Incorporate another split_like_shell() fix from Module::Build.
+
 0.04  Sun Oct 10 00:31:08 CDT 2004
 
  - Changed the split_like_shell() method to use the shellwords()
