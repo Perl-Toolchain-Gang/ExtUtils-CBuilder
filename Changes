@@ -1,6 +1,6 @@
 Revision history for Perl extension ExtUtils::CBuilder.
 
-0.06
+0.06  Mon Dec 27 22:51:36 CST 2004
 
  - Fixed a bug on Unix environments in which our work-around for
    shell-commands like "FOO=BAR cc" (which is supposed to be turned
