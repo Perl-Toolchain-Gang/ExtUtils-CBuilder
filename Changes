@@ -1,5 +1,14 @@
 Revision history for Perl extension ExtUtils::CBuilder.
 
+0.09_01  (Beta for 0.10 - untested!)   Sun Mar  6 09:45:12 CST 2005
+
+ - Split out a few simple routines that format how compile switches
+   are formatted, so that we can override them for platforms like VMS
+   where they're very different.
+
+ - Fix compile() on VMS, probably. [Help from Michael Schwern and
+   Peter Prymmer]
+
 0.09  Tue Feb  8 17:57:41 CST 2005
 
  - Fixed a broken link_executable() method on cygwin - it now uses
