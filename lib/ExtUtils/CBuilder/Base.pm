@@ -130,7 +130,8 @@ sub link {
   $objects = [$objects] unless ref $objects;
   $args{lib_file} ||= $self->lib_file($objects->[0]);
   
-  my @temp_files = 
+  my @temp_files;
+  @temp_files =
     $self->prelink(%args,
 		   dl_name => $args{module_name}) if $self->need_prelink;
   
