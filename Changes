@@ -1,12 +1,6 @@
 Revision history for Perl extension ExtUtils::CBuilder.
 
-0.00_02  Wed Dec  3 21:45:40 CST 2003
+0.01  Mon Jan 12 08:12:35 CST 2004
 
- - Added a bunch of platform-specific code from the Module::Build
-   project, should work on all platforms except Windows now.  Windows
-   will be in the next release.
-
-0.00_01  Mon Dec  1 19:46:00 CST 2003
-
- - original version, only works on Unix probably.
-
+ - Original release, taken from Module::Build's C-building code, with
+   patching help from Randy Sims.

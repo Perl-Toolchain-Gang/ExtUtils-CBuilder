@@ -1,6 +1,6 @@
 --- #YAML:1.0
 name: ExtUtils-CBuilder
-version: 0.00_03
+version: 0.01
 license: perl
 distribution_type: module
 requires:
@@ -13,7 +13,7 @@ conflicts: {}
 provides:
   ExtUtils::CBuilder:
     file: lib/ExtUtils/CBuilder.pm
-    version: 0.00_03
+    version: 0.01
   ExtUtils::CBuilder::Base:
     file: lib/ExtUtils/CBuilder/Base.pm
     version: 0.00_01
