@@ -43,6 +43,18 @@ sub object_file {
   return "$file_base$self->{config}{obj_ext}";
 }
 
+sub arg_include_dirs {
+  my $self = shift;
+  return map {"-I$_"} @_;
+}
+
+sub arg_nolink { '-c' }
+
+sub arg_object_file {
+  my ($self, $file) = @_;
+  return ('-o', $file);
+}
+
 sub compile {
   my ($self, %args) = @_;
   die "Missing 'source' argument to compile()" unless defined $args{source};
@@ -51,18 +63,23 @@ sub compile {
 
   $args{object_file} ||= $self->object_file($args{source});
   
-  my @include_dirs = map {"-I$_"} (@{$args{include_dirs} || []},
-				   File::Spec->catdir($cf->{installarchlib}, 'CORE'));
+  my @include_dirs = $self->arg_include_dirs
+    (@{$args{include_dirs} || []},
+     File::Spec->catdir($cf->{installarchlib}, 'CORE'));
   
   my @extra_compiler_flags = $self->split_like_shell($args{extra_compiler_flags});
   my @cccdlflags = $self->split_like_shell($cf->{cccdlflags});
   my @ccflags = $self->split_like_shell($cf->{ccflags});
   my @optimize = $self->split_like_shell($cf->{optimize});
-  my @flags = (@include_dirs, @cccdlflags, @extra_compiler_flags, '-c', @ccflags, @optimize);
+  my @flags = (@include_dirs, @cccdlflags, @extra_compiler_flags,
+	       $self->arg_nolink,
+	       @ccflags, @optimize,
+	       $self->arg_object_file($args{object_file}),
+	      );
   
   my @cc = $self->split_like_shell($cf->{cc});
   
-  $self->do_system(@cc, @flags, '-o', $args{object_file}, $args{source})
+  $self->do_system(@cc, @flags, $args{source})
     or die "error building $args{object_file} from '$args{source}'";
 
   return $args{object_file};
