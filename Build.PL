@@ -11,6 +11,7 @@ my $build = Module::Build->new
    build_requires => {
 		      Test => 0,
 		     },
+   create_makefile_pl => 'traditional',
   );
 
 $build->create_build_script;
