@@ -100,6 +100,14 @@ sub lib_file {
   return "$dl_file.$self->{config}{dlext}";
 }
 
+
+sub exe_file {
+  my ($self, $dl_file) = @_;
+  $dl_file =~ s/\.[^.]+$//;
+  $dl_file =~ tr/"//d;
+  return "$dl_file$self->{config}{_exe}";
+}
+
 sub need_prelink { 0 }
 
 sub prelink {
@@ -124,11 +132,22 @@ sub prelink {
 
 sub link {
   my ($self, %args) = @_;
+  return $self->_do_link('lib_file', lddl => 1, %args);
+}
+
+sub link_executable {
+  my ($self, %args) = @_;
+  return $self->_do_link('exe_file', lddl => 0, %args);
+}
+				   
+sub _do_link {
+  my ($self, $type, %args) = @_;
+
   my $cf = $self->{config}; # For convenience
   
   my $objects = delete $args{objects};
   $objects = [$objects] unless ref $objects;
-  $args{lib_file} ||= $self->lib_file($objects->[0]);
+  my $out = $args{$type} || $self->$type($objects->[0]);
   
   my @temp_files;
   @temp_files =
@@ -136,14 +155,15 @@ sub link {
 		   dl_name => $args{module_name}) if $self->need_prelink;
   
   my @linker_flags = $self->split_like_shell($args{extra_linker_flags});
-  my @lddlflags = $self->split_like_shell($cf->{lddlflags});
+  my @lddlflags = $args{lddl} ? $self->split_like_shell($cf->{lddlflags}) : ();
   my @shrp = $self->split_like_shell($cf->{shrpenv});
   my @ld = $self->split_like_shell($cf->{ld});
-  $self->do_system(@shrp, @ld, @lddlflags, '-o', $args{lib_file}, @$objects, @linker_flags)
-    or die "error building $args{lib_file} from @$objects";
+  $self->do_system(@shrp, @ld, @lddlflags, '-o', $out, @$objects, @linker_flags)
+    or die "error building $out from @$objects";
   
-  return wantarray ? ($args{lib_file}, @temp_files) : $args{lib_file};
+  return wantarray ? ($out, @temp_files) : $out;
 }
+
 
 sub do_system {
   my ($self, @cmd) = @_;

@@ -1,5 +1,11 @@
 Revision history for Perl extension ExtUtils::CBuilder.
 
+0.07
+
+ - Added the link_executable() method, which provides the ability to
+   create standalone executables. [Alberto Manuel Brandao Simoes]
+
+
 0.06  Mon Dec 27 22:51:36 CST 2004
 
  - Fixed a bug on Unix environments in which our work-around for

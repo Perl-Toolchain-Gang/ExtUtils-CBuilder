@@ -166,6 +166,7 @@ object files to process, either in a string (for one object file) or
 list reference (for one or more files).  The following parameters are
 optional:
 
+
 =over 4
 
 =item lib_file
@@ -192,6 +193,27 @@ will be called automatically.
 The operation of this method is also affected by the C<lddlflags>,
 C<shrpenv>, and C<ld> entries in C<Config.pm>.
 
+=item link_executable
+
+Invokes the linker to produce an executable file from object files.  In
+scalar context, the name of the executable file is returned.  In list
+context, the executable file and any temporary files created are
+returned.  A required C<objects> parameter contains the name of the
+object files to process, either in a string (for one object file) or
+list reference (for one or more files).  The optional parameters are
+the same as C<link> with exception for
+
+
+=over 4
+
+=item exe_file
+
+Specifies the name of the output executable file to create.  Otherwise
+the C<exe_file()> method will be consulted, passing it the name of the
+first entry in C<objects>.
+
+=back
+
 =item object_file
 
  my $object_file = $b->object_file($source_file);
@@ -208,6 +230,16 @@ Converts the name of an object file to the most natural name of a
 output library file to create from it.  For instance, on Mac OS X the
 object file F<foo.o> would result in the library file F<foo.bundle>.
 
+=item exe_file
+
+ my $exe_file = $b->exe_file($object_file);
+
+Converts the name of an object file to the most natural name of an
+executable file to create from it.  For instance, on Mac OS X the
+object file F<foo.o> would result in the executable file F<foo>, and
+on Windows it would result in F<foo.exe>.
+
+
 =item prelink
 
 On certain platforms like Win32, OS/2, VMS, and AIX, it is necessary
@@ -219,7 +251,7 @@ The names of any files written will be returned as a list.
 Several parameters correspond to C<ExtUtils::Mksymlists::Mksymlists()>
 options, as follows:
 
-    Mksymlists()  prelink_objects()       type
+    Mksymlists()   prelink()          type
    -------------|-------------------|-------------------
     NAME        |  dl_name          | string (required)
     DLBASE      |  dl_base          | string
