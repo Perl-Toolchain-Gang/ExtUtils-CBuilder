@@ -6,7 +6,7 @@ use ExtUtils::CBuilder::Base;
 use vars qw(@ISA);
 @ISA = qw(ExtUtils::CBuilder::Base);
 
-sub link_objects {
+sub link {
   my $self = shift;
   my $cf = $self->{config};
   
@@ -22,7 +22,7 @@ sub link_objects {
     $cf->{ld} =~ s/^(\s*\w+=)/env $1/;
   }
   
-  return $self->SUPER::link_objects(@_);
+  return $self->SUPER::link(@_);
 }
 
 1;

@@ -1,5 +1,11 @@
 Revision history for Perl extension ExtUtils::CBuilder.
 
+0.06
+
+ - Fixed a bug on Unix environments in which our work-around for
+   shell-commands like "FOO=BAR cc" (which is supposed to be turned
+   into "env FOO=BAR cc" to actually work) wasn't being called.
+
 0.05  Wed Oct 13 23:09:09 CDT 2004
 
  - Fixed a bug in split_like_shell() in which leading whitespace was
