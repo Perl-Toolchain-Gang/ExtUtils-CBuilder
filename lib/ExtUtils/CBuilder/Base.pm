@@ -5,6 +5,7 @@ use File::Spec;
 use File::Basename;
 use IO::File;
 use Config;
+use Text::ParseWords;
 
 use vars qw($VERSION);
 $VERSION = '0.00_01';
@@ -155,12 +156,7 @@ sub split_like_shell {
   return () unless defined($string) && length($string);
   return @$string if UNIVERSAL::isa($string, 'ARRAY');
   
-  return $self->shell_split($string);
+  return Text::ParseWords::shellwords($string);
 }
-
-sub shell_split {
-  return split ' ', $_[1];  # XXX This is naive - needs a fix
-}
-
 
 1;
