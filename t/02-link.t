@@ -7,6 +7,11 @@ BEGIN {
     print "1..0 # Skipped: link_executable() is not implemented yet on Win32\n";
     exit;
   }
+  if ($^O eq 'VMS') {
+    # So we can get the return value of system()
+    require vmsish;
+    import vmsish;
+  }
   plan tests => 5;
 }
 
@@ -35,11 +40,18 @@ my ($exe_file, @temps);
 ok $exe_file;
 
 # Try the executable
-my $retval = system($exe_file);
-ok $retval >> 8, 11;
+ok my_system($exe_file), 11;
 
 # Clean up
 for ($source_file, $exe_file, $object_file, @temps) {
   tr/"'//d;
   1 while unlink;
+}
+
+sub my_system {
+  my $cmd = shift;
+  if ($^O eq 'VMS') {
+    return system("mcr $cmd");
+  }
+  return system($cmd) >> 8;
 }
