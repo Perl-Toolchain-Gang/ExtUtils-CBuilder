@@ -1,5 +1,10 @@
 Revision history for Perl extension ExtUtils::CBuilder.
 
+0.08  Tue Jan 18 21:54:11 CST 2005
+
+ - Fixed a testing error in which I had the prototype wrong for the
+   main() function. [Jose Pedro Oliveira]
+
 0.07  Wed Jan 12 21:50:34 CST 2005
 
  - Added the link_executable() method, which provides the ability to
