@@ -1,5 +1,10 @@
 Revision history for Perl extension ExtUtils::CBuilder.
 
+0.03
+
+ - Fixed minor problems with the Build.PL file, the module names
+   should be quoted.
+
 0.02  Fri Feb 20 10:17:40 CST 2004
 
  - Fixed a bug in .../Platform/Windows.pm, in which compile() was
