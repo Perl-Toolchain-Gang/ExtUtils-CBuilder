@@ -1,0 +1,38 @@
+--- #YAML:1.0
+name: ExtUtils-CBuilder
+version: 0.00_03
+license: perl
+distribution_type: module
+requires:
+  File::Basename: 0
+  File::Spec: 0
+recommends: {}
+build_requires:
+  Test: 0
+conflicts: {}
+provides:
+  ExtUtils::CBuilder:
+    file: lib/ExtUtils/CBuilder.pm
+    version: 0.00_03
+  ExtUtils::CBuilder::Base:
+    file: lib/ExtUtils/CBuilder/Base.pm
+    version: 0.00_01
+  ExtUtils::CBuilder::Platform::Unix:
+    file: lib/ExtUtils/CBuilder/Platform/Unix.pm
+  ExtUtils::CBuilder::Platform::Windows:
+    file: lib/ExtUtils/CBuilder/Platform/Windows.pm
+  ExtUtils::CBuilder::Platform::Windows::BCC:
+    file: lib/ExtUtils/CBuilder/Platform/Windows.pm
+  ExtUtils::CBuilder::Platform::Windows::GCC:
+    file: lib/ExtUtils/CBuilder/Platform/Windows.pm
+  ExtUtils::CBuilder::Platform::Windows::MSVC:
+    file: lib/ExtUtils/CBuilder/Platform/Windows.pm
+  ExtUtils::CBuilder::Platform::aix:
+    file: lib/ExtUtils/CBuilder/Platform/aix.pm
+  ExtUtils::CBuilder::Platform::cygwin:
+    file: lib/ExtUtils/CBuilder/Platform/cygwin.pm
+  ExtUtils::CBuilder::Platform::darwin:
+    file: lib/ExtUtils/CBuilder/Platform/darwin.pm
+  ExtUtils::CBuilder::Platform::os2:
+    file: lib/ExtUtils/CBuilder/Platform/os2.pm
+generated_by: Module::Build version 0.21_02
