@@ -31,6 +31,21 @@ sub _compiler_type {
 	  : 'GCC');
 }
 
+sub split_like_shell {
+  # In Win32 command shells, the backslashes in the string "\bar\baz"
+  # should be preserved, because they often show up as parts of
+  # pathnames.  We double-up all these backslashes so shellwords() can
+  # still be used (making sure to avoid backslash-quote pairs, which
+  # should work the same as on Unix).
+
+  (my $self, local $_) = @_;
+  if (defined() && length() && !ref()) {
+    s/\\(?!")/\\\\/g;
+  }
+
+  return $self->SUPER::split_like_shell($_);
+}
+
 sub compile {
   my ($self, %args) = @_;
   my $cf = $self->{config};
