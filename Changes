@@ -1,5 +1,10 @@
 Revision history for Perl extension ExtUtils::CBuilder.
 
+0.02
+
+ - Fixed a bug in .../Platform/Windows.pm, in which compile() was
+   ignoring an 'include_dirs' argument.  [Randy Sims]
+
 0.01  Mon Jan 12 08:12:35 CST 2004
 
  - Original release, taken from Module::Build's C-building code, with
