@@ -1,6 +1,6 @@
 Revision history for Perl extension ExtUtils::CBuilder.
 
-0.09
+0.09  Tue Feb  8 17:57:41 CST 2005
 
  - Fixed a broken link_executable() method on cygwin - it now uses
    'gcc' instead of $Config{ld} for the linking, because the latter is
