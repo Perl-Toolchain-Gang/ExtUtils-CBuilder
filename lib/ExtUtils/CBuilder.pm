@@ -313,6 +313,20 @@ during linking, and false otherwise.
 
 =back
 
+=head1 TO DO
+
+Currently this has only been tested on Unix and doesn't contain any of
+the Windows-specific code from the C<Module::Build> project.  I'll do
+that next.
+
+=head1 HISTORY
+
+This module is an outgrowth of the C<Module::Build> project, to which
+there have been many contributors.  Notably, Randy W. Sims submitted
+lots of code to support 3 compilers on Windows and helped with various
+other platform-specific issues.
+
+
 =head1 AUTHOR
 
 Ken Williams, kwilliams@cpan.org
