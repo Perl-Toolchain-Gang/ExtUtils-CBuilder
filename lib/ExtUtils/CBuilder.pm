@@ -56,7 +56,6 @@ my %OSTYPES = qw(
 # More importantly, don't make it an inheritable method.
 my $load = sub {
   my $mod = shift;
-  #warn "Using $mod";
   eval "use $mod";
   die $@ if $@;
   @ISA = ($mod);
