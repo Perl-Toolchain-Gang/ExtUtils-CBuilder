@@ -13,6 +13,7 @@ my $build = Module::Build->new
 		      'Test' => 0,
 		     },
    create_makefile_pl => 'traditional',
+   sign => 1,
   );
 
 $build->create_build_script;
