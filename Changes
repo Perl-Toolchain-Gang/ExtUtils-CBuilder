@@ -5,6 +5,14 @@ Revision history for Perl extension ExtUtils::CBuilder.
  - Added the link_executable() method, which provides the ability to
    create standalone executables. [Alberto Manuel Brandao Simoes]
 
+ - Integrated the latest split_like_shell() for Windows from
+   Module::Build (really need to find a better home for this code...),
+   which now does a much better job of handling quotes and backslashes
+   and so on. [Randy Sims]
+
+ - Fixed a couple of Windows problems related to the output-file name
+   in link(), and some clobbering of the 'include_dirs' parameter to
+   compile(). [Randy Sims]
 
 0.06  Mon Dec 27 22:51:36 CST 2004
 
