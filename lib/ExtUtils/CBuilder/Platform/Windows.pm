@@ -53,7 +53,7 @@ sub compile {
                    ],
     optimize    => [ $self->split_like_shell($cf->{optimize})    ],
     defines     => [ '' ],
-    includes    => $self->{include_dirs} || [],
+    includes    => $args{include_dirs} || [],
     perlinc     => [
                      File::Spec->catdir($cf->{archlib}, 'CORE'),
                      $self->split_like_shell($cf->{incpath}),
@@ -210,7 +210,7 @@ sub format_compiler_cmd {
     if $spec{use_scripts};
 
   return [ grep {defined && length} (
-    $spec{cc}, '-c'         ,
+    $spec{cc},'-nologo','-c',
     @{$spec{includes}}      ,
     @{$spec{cflags}}        ,
     @{$spec{optimize}}      ,
