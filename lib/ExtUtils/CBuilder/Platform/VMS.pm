@@ -8,4 +8,18 @@ use vars qw(@ISA);
 
 sub need_prelink { 1 }
 
+sub arg_include_dirs {
+  my $self = shift;
+  return '/include=(' . join(',', @_) . ')';
+}
+
+sub arg_nolink { }
+
+sub arg_object_file {
+  my ($self, $file) = @_;
+  return "/obj=$file";
+}
+
+
+
 1;
