@@ -1,6 +1,6 @@
 Revision history for Perl extension ExtUtils::CBuilder.
 
-0.01  Thu Oct  9 16:24:12 2003
-	- original version; created by h2xs 1.2 with options
-		-XA -n ExtUtils::CBuilder
+0.00_01  Mon Dec  1 19:46:00 CST 2003
+
+ - original version, only works on Unix probably.
 
