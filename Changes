@@ -6,8 +6,8 @@ Revision history for Perl extension ExtUtils::CBuilder.
    are formatted, so that we can override them for platforms like VMS
    where they're very different.
 
- - Fix compile() on VMS, probably. [Help from Michael Schwern and
-   Peter Prymmer]
+ - Fix compile() and link() on VMS, probably. [Help from Michael
+   Schwern and Peter Prymmer]
 
 0.09  Tue Feb  8 17:57:41 CST 2005
 
