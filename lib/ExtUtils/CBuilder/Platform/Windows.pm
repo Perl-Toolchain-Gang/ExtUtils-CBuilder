@@ -40,6 +40,8 @@ sub compile {
   my ($basename, $srcdir) =
     ( File::Basename::fileparse($args{source}, '\.[^.]+$') )[0,1];
 
+  $srcdir ||= File::Spec->curdir();
+
   my %spec = (
     srcdir      => $srcdir,
     builddir    => $srcdir,
@@ -88,6 +90,7 @@ sub link {
 
   my @objects = ( ref $args{objects} eq 'ARRAY' ? @{$args{objects}} : $args{objects} );
   my $to = join '', (File::Spec->splitpath($objects[0]))[0,1];
+  $to ||= File::Spec->curdir();
 
   (my $file_base = $args{module_name}) =~ s/.*:://;
 
@@ -149,7 +152,7 @@ sub link {
     $self->do_system( @$cmd );
   }
 
-#  (my $out = $spec{output}) =~ tr/'"//d;
+  $spec{output} =~ tr/'"//d;
   return wantarray
     ? grep defined, @spec{qw[output implib explib def_file map_file base_file]}
     : $spec{output};
