@@ -1,6 +1,6 @@
 Revision history for Perl extension ExtUtils::CBuilder.
 
-0.03
+0.03  Fri May 14 23:12:23 CDT 2004
 
  - Fixed minor problems with the Build.PL file, the module names
    should be quoted.
