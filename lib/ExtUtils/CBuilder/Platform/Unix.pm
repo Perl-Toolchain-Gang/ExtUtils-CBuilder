@@ -22,7 +22,7 @@ sub link_objects {
     $cf->{ld} =~ s/^(\s*\w+=)/env $1/;
   }
   
-  return $self->SUPER::link_c(@_);
+  return $self->SUPER::link_objects(@_);
 }
 
 1;
