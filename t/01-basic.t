@@ -1,20 +1,38 @@
-# Before `make install' is performed this script should be runnable with
-# `make test'. After `make install' it should work as `perl test.pl'
+#! perl -w
 
-######################### We start with some black magic to print on failure.
+use strict;
+use Test;
+BEGIN { plan tests => 8 }
 
-# Change 1..1 below to 1..last_test_to_print .
-# (It may become useful if the test is moved to ./t subdirectory.)
-
-BEGIN { $| = 1; print "1..1\n"; }
-END {print "not ok 1\n" unless $loaded;}
 use ExtUtils::CBuilder;
-$loaded = 1;
-print "ok 1\n";
+use File::Spec;
+ok 1;
 
-######################### End of black magic.
+my $b = ExtUtils::CBuilder->new;
+ok $b;
 
-# Insert your test code below (better if it prints "ok 13"
-# (correspondingly "not ok 13") depending on the success of chunk 13
-# of the test code):
+ok $b->have_c_compiler;
 
+my $source_file = File::Spec->catfile('t', 'compilet.c');
+{
+  local *FH;
+  open FH, "> $source_file" or die "Can't create $source_file: $!";
+  print FH "int boot_compilet() { return 1; }\n";
+  close FH;
+}
+ok -e $source_file;
+
+my $object_file = $b->object_file($source_file);
+ok 1;
+
+ok $object_file, $b->compile_library(source => $source_file);
+
+my $lib_file = $b->lib_file($object_file);
+ok 1;
+
+ok $lib_file, $b->link_objects(objects => $object_file,
+			       module_name => 'compilet');
+
+for ($source_file, $lib_file, $object_file) {
+  1 while unlink;
+}

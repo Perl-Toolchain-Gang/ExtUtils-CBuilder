@@ -2,22 +2,57 @@ package ExtUtils::CBuilder;
 
 use strict;
 use File::Spec;
+use File::Basename;
 use IO::File;
+use Config;
 
 use vars qw($VERSION);
-$VERSION = '0.01';
+$VERSION = '0.00_01';
 
 sub new {
-  return bless {}, shift;
+  my $class = shift;
+  my $self = bless {@_}, $class;
+
+  while (my ($k,$v) = each %Config) {
+    $self->{config}{$k} = $v unless exists $self->{config}{$k};
+  }
+  return $self;
 }
 
-sub compile_c {
+sub object_file {
+  my ($self, $filename) = @_;
+
+  # File name, minus the suffix
+  (my $file_base = $filename) =~ s/\.[^.]+$//;
+  return "$file_base$self->{config}{obj_ext}";
 }
 
 sub compile_library {
+  my ($self, %args) = @_;
+  
+  my $cf = $self->{config}; # For convenience
+
+  $args{object_file} ||= $self->object_file($args{source});
+  
+  my @include_dirs = map {"-I$_"} (@{$args{include_dirs} || []},
+				   File::Spec->catdir($cf->{installarchlib}, 'CORE'));
+  
+  my @extra_compiler_flags = $self->split_like_shell($args{extra_compiler_flags});
+  my @cccdlflags = $self->split_like_shell($cf->{cccdlflags});
+  my @ccflags = $self->split_like_shell($cf->{ccflags});
+  my @optimize = $self->split_like_shell($cf->{optimize});
+  my @flags = (@include_dirs, @cccdlflags, @extra_compiler_flags, '-c', @ccflags, @optimize);
+  
+  my @cc = $self->split_like_shell($cf->{cc});
+  
+  $self->do_system(@cc, @flags, '-o', $args{object_file}, $args{source})
+    or die "error building $cf->{dlext} file from '$args{source}'";
+
+  return $args{object_file};
 }
 
 sub compile_executable {
+  die "Not implemented yet";
 }
 
 sub have_c_compiler {
@@ -30,86 +65,88 @@ sub have_c_compiler {
     print $fh "int boot_compilet() { return 1; }\n";
   }
 
-  $self->{have_compiler} = 0 + eval { $self->compile_library($tmpfile); 1 };
-  1 while unlink $tmpfile;
-  return $self->{have_compiler};
-}
-
-# Copied from Time::HiRes
-sub try_compile_and_link {
-  my ($c, %args) = @_;
+  my ($obj_file, @lib_files);
+  eval {
+    $obj_file = $self->compile_library(source => $tmpfile);
+    @lib_files = $self->link_objects(objects => $obj_file, module_name => 'compilet');
+  };
+  warn $@ if $@;
+  my $result = $self->{have_compiler} = $@ ? 0 : 1;
   
-  my ($ok) = 0;
-  my $tmp = File::Spec->tmpdir;
-  
-  local(*TMPC);
-  
-  my $obj_ext = $Config{obj_ext} || ".o";
-  unlink("$tmp.c", "$tmp$obj_ext");
-  
-  if (open(TMPC, ">$tmp.c")) {
-    print TMPC $c;
-    close(TMPC);
-    
-    my $cccmd = $args{cccmd};
-    
-    my $errornull;
-    
-    my $COREincdir;
-    
-    if ($ENV{PERL_CORE}) {
-      my $updir = File::Spec->updir;
-      $COREincdir = File::Spec->catdir(($updir) x 3);
-    } else {
-      $COREincdir = File::Spec->catdir($Config{'archlibexp'}, 'CORE');
-    }
-    
-    my $ccflags = $Config{'ccflags'} . ' ' . "-I$COREincdir";
-    
-    if ($^O eq 'VMS') {
-      if ($ENV{PERL_CORE}) {
-	# Fragile if the extensions change hierachy within
-	# the Perl core but this should do for now.
-	$cccmd = "$Config{'cc'} /include=([---]) $tmp.c";
-      } else {
-	my $perl_core = $Config{'installarchlib'};
-	$perl_core =~ s/\]$/.CORE]/;
-	$cccmd = "$Config{'cc'} /include=(perl_root:[000000],$perl_core) $tmp.c";
-      }
-    }
-    
-    if ($args{silent} || !$VERBOSE) {
-      $errornull = "2>/dev/null" unless defined $errornull;
-    } else {
-      $errornull = '';
-    }
-    
-    $cccmd = "$Config{'cc'} -o $tmp $ccflags $tmp.c @$LIBS $errornull"
-      unless defined $cccmd;
-    
-    if ($^O eq 'VMS') {
-      open( CMDFILE, ">$tmp.com" );
-      print CMDFILE "\$ SET MESSAGE/NOFACILITY/NOSEVERITY/NOIDENT/NOTEXT\n";
-      print CMDFILE "\$ $cccmd\n";
-      print CMDFILE "\$ IF \$SEVERITY .NE. 1 THEN EXIT 44\n"; # escalate
-      close CMDFILE;
-      system("\@ $tmp.com");
-      $ok = $?==0;
-      for ("$tmp.c", "$tmp$obj_ext", "$tmp.com", "$tmp$Config{exe_ext}") {
-	1 while unlink $_;
-      }
-    } else {
-      my $tmp_exe = "$tmp$ld_exeext";
-      printf "cccmd = $cccmd\n" if $VERBOSE;
-      my $res = system($cccmd);
-      $ok = defined($res) && $res==0 && -s $tmp_exe && -x _;
-      unlink("$tmp.c", $tmp_exe);
-    }
+  foreach (grep defined, $tmpfile, $obj_file, @lib_files) {
+    1 while unlink;
   }
-  
-  $ok;
+  return $result;
 }
 
+sub lib_file {
+  my ($self, $dl_file) = @_;
+  $dl_file =~ s/\.[^.]+$//;
+  $dl_file =~ tr/"//d;
+  return "$dl_file.$self->{config}{dlext}";
+}
+
+sub need_prelink_objects { 0 }
+
+sub prelink_objects {
+  my ($self, %args) = @_;
+  
+  ($args{dl_file} = $args{dl_name}) =~ s/.*::// unless $args{dl_file};
+  
+  require ExtUtils::Mksymlists;
+  ExtUtils::Mksymlists::Mksymlists( # dl. abbrev for dynamic library
+    DL_VARS  => $args{dl_vars}      || [],
+    DL_FUNCS => $args{dl_funcs}     || {},
+    FUNCLIST => $args{dl_func_list} || [],
+    IMPORTS  => $args{dl_imports}   || {},
+    NAME     => $args{dl_name},
+    DLBASE   => $args{dl_base},
+    FILE     => $args{dl_file},
+  );
+  
+  return grep -e, map "$args{dl_file}.$_", qw(ext def opt);
+}
+
+sub link_objects {
+  my ($self, %args) = @_;
+  my $cf = $self->{config}; # For convenience
+  
+  my $objects = delete($args{objects}) || [];
+  $objects = [$objects] unless ref $objects;
+  $args{lib_file} ||= $self->lib_file($objects->[0]);
+  
+  my @temp_files = 
+    $self->prelink_objects(%args,
+			   dl_name => $args{module_name}) if $self->need_prelink_objects;
+  
+  my @linker_flags = $self->split_like_shell($args{extra_linker_flags});
+  my @lddlflags = $self->split_like_shell($cf->{lddlflags});
+  my @shrp = $self->split_like_shell($cf->{shrpenv});
+  my @ld = $self->split_like_shell($cf->{ld});
+  $self->do_system(@shrp, @ld, @lddlflags, '-o', $args{lib_file}, @$objects, @linker_flags)
+    or die "error building $args{lib_file} from @$objects";
+  
+  return wantarray ? ($args{lib_file}, @temp_files) : $args{lib_file};
+}
+
+sub do_system {
+  my ($self, @cmd) = @_;
+  print "@cmd\n";
+  return !system(@cmd);
+}
+
+sub split_like_shell {
+  my ($self, $string) = @_;
+  
+  return () unless defined($string) && length($string);
+  return @$string if UNIVERSAL::isa($string, 'ARRAY');
+  
+  return $self->shell_split($string);
+}
+
+sub shell_split {
+  return split ' ', $_[1];  # XXX This is naive - needs a fix
+}
 
 
 1;
