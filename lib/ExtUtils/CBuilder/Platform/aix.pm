@@ -7,15 +7,15 @@ use File::Spec;
 use vars qw(@ISA);
 @ISA = qw(ExtUtils::CBuilder::Platform::Unix);
 
-sub need_prelink_objects { 1 }
+sub need_prelink { 1 }
 
-sub link_objects {
+sub link {
   my ($self, %args) = @_;
   my $cf = $self->{config};
 
   (my $baseext = $args{module_name}) =~ s/.*:://;
   my $perl_inc = File::Spec->catdir($cf->{archlibexp}, 'CORE'); #location of perl.exp
-  
+
   # Massage some very naughty bits in %Config
   local $cf->{lddlflags} = $cf->{lddlflags};
   for ($cf->{lddlflags}) {
@@ -23,7 +23,7 @@ sub link_objects {
     s/\Q$(PERL_INC)\E/$perl_inc/;
   }
 
-  return $self->SUPER::link_objects(%args);
+  return $self->SUPER::link(%args);
 }
 
 

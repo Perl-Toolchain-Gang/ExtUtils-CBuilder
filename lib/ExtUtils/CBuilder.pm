@@ -88,10 +88,10 @@ ExtUtils::CBuilder - Compile and link C code for Perl modules
 =head1 SYNOPSIS
 
   use ExtUtils::CBuilder;
-  
+
   my $b = ExtUtils::CBuilder->new(%options);
-  $obj_file = $b->compile_library(source => 'MyModule.c');
-  $lib_file = $b->link_objects(objects => $obj_file);
+  $obj_file = $b->compile(source => 'MyModule.c');
+  $lib_file = $b->link(objects => $obj_file);
 
 =head1 DESCRIPTION
 
@@ -116,13 +116,13 @@ by the object, as in the following example:
   my $b = ExtUtils::CBuilder->new( config =>
                                    { ld => 'gcc' } );
 
-=item have_c_compiler
+=item have_compiler
 
 Returns true if the current system has a working C compiler and
 linker, false otherwise.  To determine this, we actually compile and
 link a sample C library.
 
-=item compile_library
+=item compile
 
 Compiles a C source file and produces an object file.  The name of the
 object file is returned.  The source file is specified in a C<source>
@@ -156,7 +156,7 @@ The operation of this method is also affected by the
 C<installarchlib>, C<cccdlflags>, C<ccflags>, C<optimize>, and C<cc>
 entries in C<Config.pm>.
 
-=item link_objects
+=item link
 
 Invokes the linker to produce a library file from object files.  In
 scalar context, the name of the library file is returned.  In list
@@ -186,7 +186,7 @@ Any additional flags you wish to pass to the linker.
 
 =back
 
-On platforms where C<need_prelink_c()> returns true, C<prelink_c()>
+On platforms where C<need_prelink()> returns true, C<prelink()>
 will be called automatically.
 
 The operation of this method is also affected by the C<lddlflags>,
@@ -208,7 +208,7 @@ Converts the name of an object file to the most natural name of a
 output library file to create from it.  For instance, on Mac OS X the
 object file F<foo.o> would result in the library file F<foo.bundle>.
 
-=item prelink_objects
+=item prelink
 
 On certain platforms like Win32, OS/2, VMS, and AIX, it is necessary
 to perform some actions before invoking the linker.  The
@@ -232,9 +232,9 @@ options, as follows:
 Please see the documentation for C<ExtUtils::Mksymlists> for the
 details of what these parameters do.
 
-=item need_prelink_objects
+=item need_prelink
 
-Returns true on platforms where C<prelink_objects()> should be called
+Returns true on platforms where C<prelink()> should be called
 during linking, and false otherwise.
 
 =back
@@ -251,7 +251,6 @@ This module is an outgrowth of the C<Module::Build> project, to which
 there have been many contributors.  Notably, Randy W. Sims submitted
 lots of code to support 3 compilers on Windows and helped with various
 other platform-specific issues.
-
 
 =head1 AUTHOR
 

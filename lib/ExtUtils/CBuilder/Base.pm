@@ -13,10 +13,26 @@ sub new {
   my $class = shift;
   my $self = bless {@_}, $class;
 
+  $self->{properties}{perl} = $class->find_perl_interpreter
+    or warn "Warning: Can't locate your perl binary";
+
   while (my ($k,$v) = each %Config) {
     $self->{config}{$k} = $v unless exists $self->{config}{$k};
   }
   return $self;
+}
+
+sub find_perl_interpreter {
+  my $perl;
+  File::Spec->file_name_is_absolute($perl = $^X)
+    or -f ($perl = $Config::Config{perlpath})
+    or ($perl = $^X);
+  return $perl;
+}
+
+sub add_to_cleanup {
+  my $self = shift;
+  my %files = map {$_, 1} @_;
 }
 
 sub object_file {
@@ -27,9 +43,9 @@ sub object_file {
   return "$file_base$self->{config}{obj_ext}";
 }
 
-sub compile_library {
+sub compile {
   my ($self, %args) = @_;
-  die "Missing 'source' argument to compile_library()" unless defined $args{source};
+  die "Missing 'source' argument to compile()" unless defined $args{source};
   
   my $cf = $self->{config}; # For convenience
 
@@ -52,11 +68,7 @@ sub compile_library {
   return $args{object_file};
 }
 
-sub compile_executable {
-  die "Not implemented yet";
-}
-
-sub have_c_compiler {
+sub have_compiler {
   my ($self) = @_;
   return $self->{have_compiler} if defined $self->{have_compiler};
   
@@ -68,8 +80,8 @@ sub have_c_compiler {
 
   my ($obj_file, @lib_files);
   eval {
-    $obj_file = $self->compile_library(source => $tmpfile);
-    @lib_files = $self->link_objects(objects => $obj_file, module_name => 'compilet');
+    $obj_file = $self->compile(source => $tmpfile);
+    @lib_files = $self->link(objects => $obj_file, module_name => 'compilet');
   };
   warn $@ if $@;
   my $result = $self->{have_compiler} = $@ ? 0 : 1;
@@ -87,9 +99,9 @@ sub lib_file {
   return "$dl_file.$self->{config}{dlext}";
 }
 
-sub need_prelink_objects { 0 }
+sub need_prelink { 0 }
 
-sub prelink_objects {
+sub prelink {
   my ($self, %args) = @_;
   
   ($args{dl_file} = $args{dl_name}) =~ s/.*::// unless $args{dl_file};
@@ -109,7 +121,7 @@ sub prelink_objects {
   return grep -e, map "$args{dl_file}.$_", qw(ext def opt);
 }
 
-sub link_objects {
+sub link {
   my ($self, %args) = @_;
   my $cf = $self->{config}; # For convenience
   
@@ -118,8 +130,8 @@ sub link_objects {
   $args{lib_file} ||= $self->lib_file($objects->[0]);
   
   my @temp_files = 
-    $self->prelink_objects(%args,
-			   dl_name => $args{module_name}) if $self->need_prelink_objects;
+    $self->prelink(%args,
+		   dl_name => $args{module_name}) if $self->objects;
   
   my @linker_flags = $self->split_like_shell($args{extra_linker_flags});
   my @lddlflags = $self->split_like_shell($cf->{lddlflags});

@@ -11,7 +11,7 @@ ok 1;
 my $b = ExtUtils::CBuilder->new;
 ok $b;
 
-ok $b->have_c_compiler;
+ok $b->have_compiler;
 
 my $source_file = File::Spec->catfile('t', 'compilet.c');
 {
@@ -25,14 +25,17 @@ ok -e $source_file;
 my $object_file = $b->object_file($source_file);
 ok 1;
 
-ok $object_file, $b->compile_library(source => $source_file);
+ok $object_file, $b->compile(source => $source_file);
 
 my $lib_file = $b->lib_file($object_file);
 ok 1;
 
-ok $lib_file, $b->link_objects(objects => $object_file,
-			       module_name => 'compilet');
+my ($lib, @temps) = $b->link(objects => $object_file,
+                             module_name => 'compilet');
+$lib =~ tr/"'//d;
+ok $lib_file, $lib;
 
-for ($source_file, $lib_file, $object_file) {
+for ($source_file, $lib_file, $object_file, @temps) {
+  tr/"'//d;
   1 while unlink;
 }

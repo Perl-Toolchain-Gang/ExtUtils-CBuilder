@@ -6,6 +6,6 @@ use ExtUtils::CBuilder::Base;
 use vars qw(@ISA);
 @ISA = qw(ExtUtils::CBuilder::Base);
 
-sub need_prelink_objects { 1 }
+sub need_prelink { 1 }
 
 1;
