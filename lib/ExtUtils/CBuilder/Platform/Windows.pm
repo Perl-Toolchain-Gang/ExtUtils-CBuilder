@@ -95,7 +95,7 @@ sub link {
     srcdir        => $to,
     builddir      => $to,
     startup       => [ ],
-    objects       => @objects,
+    objects       => \@objects,
     libs          => [ ],
     output        => File::Spec->catfile($to, "$file_base.$cf->{dlext}"),
     ld            => $cf->{ld},
