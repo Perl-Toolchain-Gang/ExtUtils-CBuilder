@@ -13,4 +13,5 @@ WriteMakefile
 		    'File::Basename' => '0',
 		    'Test' => '0',
 		   },
+   NO_META => 1,
   );
