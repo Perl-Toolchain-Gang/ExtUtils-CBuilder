@@ -154,8 +154,10 @@ sub do_system {
 sub split_like_shell {
   my ($self, $string) = @_;
   
-  return () unless defined($string) && length($string);
+  return () unless defined($string);
   return @$string if UNIVERSAL::isa($string, 'ARRAY');
+  $string =~ s/^\s+|\s+$//g;
+  return () unless length($string);
   
   return Text::ParseWords::shellwords($string);
 }

@@ -2,7 +2,7 @@
 
 use strict;
 use Test;
-BEGIN { plan tests => 8 }
+BEGIN { plan tests => 11 }
 
 use ExtUtils::CBuilder;
 use File::Spec;
@@ -39,3 +39,8 @@ for ($source_file, $lib_file, $object_file, @temps) {
   tr/"'//d;
   1 while unlink;
 }
+
+my @words = $b->split_like_shell(' foo bar');
+ok @words, 2;
+ok $words[0], 'foo';
+ok $words[1], 'bar';
