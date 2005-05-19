@@ -75,7 +75,7 @@ sub compile {
   
   my @include_dirs = $self->arg_include_dirs
     (@{$args{include_dirs} || []},
-     File::Spec->catdir($cf->{installarchlib}, 'CORE'));
+     File::Spec->catdir($cf->{archlibexp}, 'CORE'));
   
   my @extra_compiler_flags = $self->split_like_shell($args{extra_compiler_flags});
   my @cccdlflags = $self->split_like_shell($cf->{cccdlflags});

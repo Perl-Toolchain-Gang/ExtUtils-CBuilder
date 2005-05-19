@@ -153,7 +153,7 @@ together.
 =back
 
 The operation of this method is also affected by the
-C<installarchlib>, C<cccdlflags>, C<ccflags>, C<optimize>, and C<cc>
+C<archlibexp>, C<cccdlflags>, C<ccflags>, C<optimize>, and C<cc>
 entries in C<Config.pm>.
 
 =item link
