@@ -1,5 +1,12 @@
 Revision history for Perl extension ExtUtils::CBuilder.
 
+0.12
+
+ - Various parts of the code were looking for the CORE/ directory in
+   $Config{archlib}, $Config{installarchlib}, and $Config{archlibexp}.
+   Only the latter is correct, so we use that everywhere now. 
+   [Curt Tilmes]
+
 0.11  Tue Apr  5 20:58:41 CDT 2005
 
  - Added a licensing statement to CBuilder.pm. [Spotted by Chip
