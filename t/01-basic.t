@@ -1,5 +1,14 @@
 #! perl -w
 
+BEGIN {
+  if ($ENV{PERL_CORE}) {
+    chdir 't' if -d 't';
+    chdir '../lib/ExtUtils/CBuilder'
+      or die "Can't chdir to lib/ExtUtils/CBuilder: $!";
+    @INC = qw(../..);
+  }
+}
+
 use strict;
 use Test;
 BEGIN { plan tests => 11 }
@@ -8,7 +17,10 @@ use ExtUtils::CBuilder;
 use File::Spec;
 ok 1;
 
-my $b = ExtUtils::CBuilder->new;
+# TEST doesn't like extraneous output
+my $quiet = $ENV{PERL_CORE} && !$ENV{HARNESS_ACTIVE};
+
+my $b = ExtUtils::CBuilder->new(quiet => $quiet);
 ok $b;
 
 ok $b->have_compiler;

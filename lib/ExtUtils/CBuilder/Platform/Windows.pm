@@ -8,7 +8,8 @@ use File::Spec;
 
 use ExtUtils::CBuilder::Base;
 
-use vars qw(@ISA);
+use vars qw($VERSION @ISA);
+$VERSION = '0.12';
 @ISA = qw(ExtUtils::CBuilder::Base);
 
 sub new {
@@ -115,7 +116,7 @@ sub compile {
     defines     => [ '' ],
     includes    => [ @{$args{include_dirs} || []} ],
     perlinc     => [
-                     File::Spec->catdir($cf->{archlib}, 'CORE'),
+                     $self->perl_inc(),
                      $self->split_like_shell($cf->{incpath}),
                    ],
     use_scripts => 1, # XXX provide user option to change this???
@@ -154,6 +155,11 @@ sub link {
   my $output = $args{lib_file} ||
     File::Spec->catfile($to, "$file_base.$cf->{dlext}");
 
+  # if running in perl source tree, look for libs there, not installed
+  my $lddlflags = $cf->{lddlflags};
+  my $perl_src = $self->perl_src();
+  $lddlflags =~ s/\Q$cf->{archlibexp}\E[\\\/]CORE/$perl_src/ if $perl_src;
+
   my %spec = (
     srcdir        => $to,
     builddir      => $to,
@@ -165,7 +171,7 @@ sub link {
     libperl       => $cf->{libperl},
     perllibs      => [ $self->split_like_shell($cf->{perllibs})  ],
     libpath       => [ $self->split_like_shell($cf->{libpth})    ],
-    lddlflags     => [ $self->split_like_shell($cf->{lddlflags}) ],
+    lddlflags     => [ $self->split_like_shell($lddlflags) ],
     other_ldflags => [ $self->split_like_shell($args{extra_linker_flags} || '') ],
     use_scripts   => 1, # XXX provide user option to change this???
   );
@@ -236,6 +242,19 @@ sub normalize_filespecs {
   }
 }
 
+# directory of perl's include files
+sub perl_inc {
+  my $self = shift;
+
+  my $perl_src = $self->perl_src();
+
+  if ($perl_src) {
+    File::Spec->catdir($perl_src, "lib", "CORE");
+  } else {
+    File::Spec->catdir($self->{config}{archlibexp},"CORE");
+  }
+}
+
 1;
 
 ########################################################################
@@ -292,7 +311,7 @@ sub write_compiler_script {
 
   $self->add_to_cleanup($script);
 
-  print "Generating script '$script'\n";
+  print "Generating script '$script'\n" if !$self->{quiet};
 
   open( SCRIPT, ">$script" )
     or die( "Could not create script '$script': $!" );
@@ -350,7 +369,7 @@ sub write_linker_script {
 
   $self->add_to_cleanup($script);
 
-  print "Generating script '$script'\n";
+  print "Generating script '$script'\n" if !$self->{quiet};
 
   open( SCRIPT, ">$script" )
     or die( "Could not create script '$script': $!" );
@@ -407,7 +426,7 @@ sub write_compiler_script {
 
   $self->add_to_cleanup($script);
 
-  print "Generating script '$script'\n";
+  print "Generating script '$script'\n" if !$self->{quiet};
 
   open( SCRIPT, ">$script" )
     or die( "Could not create script '$script': $!" );
@@ -467,7 +486,7 @@ sub write_linker_script {
 
   $self->add_to_cleanup($ld_script, $ld_libs);
 
-  print "Generating scripts '$ld_script' and '$ld_libs'.\n";
+  print "Generating scripts '$ld_script' and '$ld_libs'.\n" if !$self->{quiet};
 
   # Script 1: contains options & names of object files.
   open( LD_SCRIPT, ">$ld_script" )
@@ -512,8 +531,11 @@ sub format_compiler_cmd {
     $path = '-I' . $path;
   }
 
+  # split off any -arguments included in cc
+  my @cc = split / (?=-)/, $spec{cc};
+
   return [ grep {defined && length} (
-    $spec{cc}, '-c'         ,
+    @cc, '-c'               ,
     @{$spec{includes}}      ,
     @{$spec{cflags}}        ,
     @{$spec{optimize}}      ,
@@ -558,8 +580,11 @@ sub format_linker_cmd {
                '--output-exp' , $spec{explib}
   ];
 
+  # split off any -arguments included in ld
+  my @ld = split / (?=-)/, $spec{ld};
+
   push @cmds, [ grep {defined && length} (
-    $spec{ld}                 ,
+    @ld                       ,
     '-o', $spec{output}       ,
     "-Wl,--base-file,$spec{base_file}"   ,
     "-Wl,--image-base,$spec{image_base}" ,
@@ -581,7 +606,7 @@ sub format_linker_cmd {
   ];
 
   push @cmds, [ grep {defined && length} (
-    $spec{ld}                 ,
+    @ld                       ,
     '-o', $spec{output}       ,
     "-Wl,--image-base,$spec{image_base}" ,
     @{$spec{lddlflags}}       ,
@@ -606,7 +631,7 @@ sub write_linker_script {
 
   $self->add_to_cleanup($script);
 
-  print "Generating script '$script'\n";
+  print "Generating script '$script'\n" if !$self->{quiet};
 
   open( SCRIPT, ">$script" )
     or die( "Could not create script '$script': $!" );

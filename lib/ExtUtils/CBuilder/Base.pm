@@ -7,7 +7,7 @@ use Config;
 use Text::ParseWords;
 
 use vars qw($VERSION);
-$VERSION = '0.00_01';
+$VERSION = '0.12';
 
 sub new {
   my $class = shift;
@@ -75,7 +75,7 @@ sub compile {
   
   my @include_dirs = $self->arg_include_dirs
     (@{$args{include_dirs} || []},
-     File::Spec->catdir($cf->{archlibexp}, 'CORE'));
+     $self->perl_inc());
   
   my @extra_compiler_flags = $self->split_like_shell($args{extra_compiler_flags});
   my @cccdlflags = $self->split_like_shell($cf->{cccdlflags});
@@ -195,7 +195,7 @@ sub _do_link {
 
 sub do_system {
   my ($self, @cmd) = @_;
-  print "@cmd\n";
+  print "@cmd\n" if !$self->{quiet};
   return !system(@cmd);
 }
 
@@ -208,6 +208,42 @@ sub split_like_shell {
   return () unless length($string);
   
   return Text::ParseWords::shellwords($string);
+}
+
+# if building perl, perl's main source directory
+sub perl_src {
+  # N.B. makemaker actually searches regardless of PERL_CORE, but
+  # only squawks at not finding it if PERL_CORE is set
+
+  return unless $ENV{PERL_CORE};
+
+  my $Updir  = File::Spec->updir;
+  my $dir = $Updir;
+
+  # Try up to 5 levels upwards
+  for (1..5) {
+    if (
+	-f File::Spec->catfile($dir,"config_h.SH")
+	&&
+	-f File::Spec->catfile($dir,"perl.h")
+	&&
+	-f File::Spec->catfile($dir,"lib","Exporter.pm")
+       ) {
+      return $dir;
+    }
+
+    $dir = File::Spec->catdir($dir, $Updir);
+  }
+  
+  warn "PERL_CORE is set but I can't find your perl source!\n";
+  return;
+}
+
+# directory of perl's include files
+sub perl_inc {
+  my $self = shift;
+
+  $self->perl_src() || File::Spec->catdir($self->{config}{archlibexp},"CORE");
 }
 
 1;

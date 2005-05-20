@@ -2,6 +2,14 @@ Revision history for Perl extension ExtUtils::CBuilder.
 
 0.12
 
+ - In order to integrate into the perl core, patches were contributed
+   that a) put a $VERSION variable in each .pm file, b) add a 'quiet'
+   parameter to new() to shut up some of the command-echoing, c)
+   checks for the perl source headers in the CORE/ directory in the
+   perl source tree, not in the post-installation location, and d)
+   adjusts the CWD when running the regression tests under the perl
+   core. [Yitzchak Scott-Thoennes]
+
  - Various parts of the code were looking for the CORE/ directory in
    $Config{archlib}, $Config{installarchlib}, and $Config{archlibexp}.
    Only the latter is correct, so we use that everywhere now. 

@@ -4,7 +4,8 @@ use strict;
 use ExtUtils::CBuilder::Platform::Unix;
 use File::Spec;
 
-use vars qw(@ISA);
+use vars qw($VERSION @ISA);
+$VERSION = '0.12';
 @ISA = qw(ExtUtils::CBuilder::Platform::Unix);
 
 sub need_prelink { 1 }
@@ -14,7 +15,7 @@ sub link {
   my $cf = $self->{config};
 
   (my $baseext = $args{module_name}) =~ s/.*:://;
-  my $perl_inc = File::Spec->catdir($cf->{archlibexp}, 'CORE'); #location of perl.exp
+  my $perl_inc = $self->perl_inc();
 
   # Massage some very naughty bits in %Config
   local $cf->{lddlflags} = $cf->{lddlflags};
