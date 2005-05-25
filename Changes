@@ -15,6 +15,9 @@ Revision history for Perl extension ExtUtils::CBuilder.
    Only the latter is correct, so we use that everywhere now. 
    [Curt Tilmes]
 
+ - Added a special-case link_executable() method on the dec_osf
+   platform that gets it working. [Jarkko Hietaniemi]
+
 0.11  Tue Apr  5 20:58:41 CDT 2005
 
  - Added a licensing statement to CBuilder.pm. [Spotted by Chip
