@@ -180,7 +180,7 @@ sub _do_link {
   my @temp_files;
   @temp_files =
     $self->prelink(%args,
-		   dl_name => $args{module_name}) if $self->need_prelink;
+		   dl_name => $args{module_name}) if $args{lddl} && $self->need_prelink;
   
   my @linker_flags = $self->split_like_shell($args{extra_linker_flags});
   my @output = $args{lddl} ? $self->arg_share_object_file($out) : $self->arg_exec_file($out);
