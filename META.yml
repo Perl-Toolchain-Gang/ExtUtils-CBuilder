@@ -1,6 +1,6 @@
 --- #YAML:1.0
 name: ExtUtils-CBuilder
-version: 0.11
+version: 0.12
 author:
   - Ken Williams, kwilliams@cpan.org
 abstract: Compile and link C code for Perl modules
@@ -14,28 +14,38 @@ build_requires:
 provides:
   ExtUtils::CBuilder:
     file: lib/ExtUtils/CBuilder.pm
-    version: 0.11
+    version: 0.12
   ExtUtils::CBuilder::Base:
     file: lib/ExtUtils/CBuilder/Base.pm
-    version: 0.00_01
+    version: 0.12
   ExtUtils::CBuilder::Platform::Unix:
     file: lib/ExtUtils/CBuilder/Platform/Unix.pm
+    version: 0.12
   ExtUtils::CBuilder::Platform::VMS:
     file: lib/ExtUtils/CBuilder/Platform/VMS.pm
+    version: 0.12
   ExtUtils::CBuilder::Platform::Windows:
     file: lib/ExtUtils/CBuilder/Platform/Windows.pm
+    version: 0.12
   ExtUtils::CBuilder::Platform::Windows::BCC:
     file: lib/ExtUtils/CBuilder/Platform/Windows.pm
+    version: 0.12
   ExtUtils::CBuilder::Platform::Windows::GCC:
     file: lib/ExtUtils/CBuilder/Platform/Windows.pm
+    version: 0.12
   ExtUtils::CBuilder::Platform::Windows::MSVC:
     file: lib/ExtUtils/CBuilder/Platform/Windows.pm
+    version: 0.12
   ExtUtils::CBuilder::Platform::aix:
     file: lib/ExtUtils/CBuilder/Platform/aix.pm
+    version: 0.12
   ExtUtils::CBuilder::Platform::cygwin:
     file: lib/ExtUtils/CBuilder/Platform/cygwin.pm
+    version: 0.12
   ExtUtils::CBuilder::Platform::darwin:
     file: lib/ExtUtils/CBuilder/Platform/darwin.pm
+    version: 0.12
   ExtUtils::CBuilder::Platform::os2:
     file: lib/ExtUtils/CBuilder/Platform/os2.pm
+    version: 0.12
 generated_by: Module::Build version 0.2608

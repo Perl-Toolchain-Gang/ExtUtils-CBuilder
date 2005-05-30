@@ -1,6 +1,6 @@
 Revision history for Perl extension ExtUtils::CBuilder.
 
-0.12
+0.12  Mon May 30 16:40:10 CDT 2005
 
  - In order to integrate into the perl core, patches were contributed
    that a) put a $VERSION variable in each .pm file, b) add a 'quiet'
