@@ -15,8 +15,9 @@ Revision history for Perl extension ExtUtils::CBuilder.
    Only the latter is correct, so we use that everywhere now. 
    [Curt Tilmes]
 
- - Added a special-case link_executable() method on the dec_osf
-   platform that gets it working. [Jarkko Hietaniemi]
+ - For Unix-ish platforms, link_executable() will now prefer
+   $Config{cc} to $Config{ld}, because that typically works
+   better. [Jarkko Hietaniemi and H.Merijn Brand]
 
  - Prelinking (invoking ExtUtils::Mksymlists to create options-files)
    is now only done when we're building dynamic libraries. [Yitzchak
