@@ -1,6 +1,6 @@
 Revision history for Perl extension ExtUtils::CBuilder.
 
-0.13
+0.13  Wed Aug 24 20:05:59 CDT 2005
 
  - Several temporary files weren't being cleaned up during testing,
    because the 'cleanup' mechanism was never properly implemented.
