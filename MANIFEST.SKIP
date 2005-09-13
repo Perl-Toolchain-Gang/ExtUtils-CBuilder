@@ -10,3 +10,4 @@ CVS
 ^README$
 ^ExtUtils-CBuilder
 ^\.
+^t/compilet\b
