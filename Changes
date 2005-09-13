@@ -1,5 +1,14 @@
 Revision history for Perl extension ExtUtils::CBuilder.
 
+0.13_01 (beta for 0.14)  Mon Sep 12 21:41:11 CDT 2005
+
+ - Several fixes have been made for VMS, including: 1) there can only
+   be one /include qualifier, so merge multiple /includes into one; 2)
+   make sure the executable is named the same way that dynaloader will
+   look for it; 3) make sure the option files for the exported symbols
+   and the PERLSHR image are passed properly to the linker. [John
+   E. Malmberg]
+
 0.13  Wed Aug 24 20:05:59 CDT 2005
 
  - Several temporary files weren't being cleaned up during testing,
