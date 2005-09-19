@@ -1,6 +1,6 @@
 Revision history for Perl extension ExtUtils::CBuilder.
 
-0.13_01 (beta for 0.14)  Mon Sep 12 21:41:11 CDT 2005
+0.14  Mon Sep 19 13:40:37 CDT 2005
 
  - Several fixes have been made for VMS, including: 1) there can only
    be one /include qualifier, so merge multiple /includes into one; 2)
