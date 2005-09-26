@@ -1,5 +1,13 @@
 Revision history for Perl extension ExtUtils::CBuilder.
 
+0.15
+
+ - Several OS/2 fixes have been made, including: 1) adding the
+   necessary version string to DLLs, 2) passing the executable's name
+   to 'ldopts' without the .exe extension, 3) avoiding calling 'env'
+   via the 'shrpenv' thingy, since it triggers a fork() bug. [Ilya
+   Zakharevich]
+
 0.14  Mon Sep 19 13:40:37 CDT 2005
 
  - Several fixes have been made for VMS, including: 1) there can only
