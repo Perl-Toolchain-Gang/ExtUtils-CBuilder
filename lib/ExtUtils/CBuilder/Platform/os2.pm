@@ -21,12 +21,12 @@ sub prelink {
   return (@res, $libname);
 }
 
-sub link {
+sub _do_link {
   # Some 'env' do exec(), thus return too early when run from ksh;
   # To avoid 'env', remove (useless) shrpenv
   my $self = shift;
   local $self->{config}{shrpenv} = '';
-  return $self->SUPER::link(@_);
+  return $self->SUPER::_do_link(@_);
 }
 
 sub extra_link_args_after_prelink {	# Add .DEF file to the link line
@@ -39,7 +39,6 @@ sub link_executable {
   my $self = shift;
   local $self->{config}{ldflags} = $self->{config}{ldflags};
   $self->{config}{ldflags} =~ s/(?<!\S)-Zexe(?!\S)//;
-  local $self->{config}{shrpenv} = '';	# See above
   return $self->SUPER::link_executable(@_);
 }
 
