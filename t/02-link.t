@@ -56,7 +56,7 @@ if ($^O eq 'os2') {		# Analogue of LDLOADPATH...
   my $old = OS2::extLibpath();	# [builtin function]
   $old = ";$old" if defined $old and length $old;
   # To pass the sanity check, components must have backslashes...
-  OS2::extLibpath_set(".\t$old");
+  OS2::extLibpath_set(".\\$old");
 }
 
 # Try the executable
