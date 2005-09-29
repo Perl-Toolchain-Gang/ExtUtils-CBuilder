@@ -63,7 +63,10 @@ if ($^O eq 'os2') {		# Analogue of LDLOADPATH...
 ok my_system($exe_file), 11;
 
 # Clean up
-unlink $source_file;
+for ($source_file, $object_file, $exe_file) {
+  tr/"'//d;
+  1 while unlink;
+}
 
 sub my_system {
   my $cmd = shift;

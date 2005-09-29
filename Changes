@@ -8,6 +8,9 @@ Revision history for Perl extension ExtUtils::CBuilder.
    via the 'shrpenv' thingy, since it triggers a fork() bug. [Ilya
    Zakharevich]
 
+ - Integrate a couple cleanup-related changes from bleadperl that
+   somehow never got into this copy. [Steve Hay]
+
 0.14  Mon Sep 19 13:40:37 CDT 2005
 
  - Several fixes have been made for VMS, including: 1) there can only
