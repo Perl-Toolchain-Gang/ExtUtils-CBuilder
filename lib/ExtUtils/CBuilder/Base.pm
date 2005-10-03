@@ -86,11 +86,13 @@ sub compile {
     (@{$args{include_dirs} || []},
      $self->perl_inc());
   
+  my @defines = map "-D$_=$args{defines}{$_}", keys %{$args{defines} || {}};
+  
   my @extra_compiler_flags = $self->split_like_shell($args{extra_compiler_flags});
   my @cccdlflags = $self->split_like_shell($cf->{cccdlflags});
   my @ccflags = $self->split_like_shell($cf->{ccflags});
   my @optimize = $self->split_like_shell($cf->{optimize});
-  my @flags = (@include_dirs, @cccdlflags, @extra_compiler_flags,
+  my @flags = (@include_dirs, @defines, @cccdlflags, @extra_compiler_flags,
 	       $self->arg_nolink,
 	       @ccflags, @optimize,
 	       $self->arg_object_file($args{object_file}),
