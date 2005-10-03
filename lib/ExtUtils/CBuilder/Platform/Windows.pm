@@ -90,6 +90,12 @@ sub split_like_shell {
   return @argv;
 }
 
+sub arg_defines {
+  my ($self, %args) = @_;
+  s/"/\\"/g foreach values %args;
+  return map "-D$_=$args{$_}", keys %args;
+}
+
 sub compile {
   my ($self, %args) = @_;
   my $cf = $self->{config};
@@ -101,11 +107,7 @@ sub compile {
 
   $srcdir ||= File::Spec->curdir();
 
-  my @defines = ();
-  while ( my($k,$v) = each %{ $args{defines} || {} } ) {
-    $v =~ s/"/\\"/g;
-    push( @defines, "-D$k=$v" );
-  }
+  my @defines = $self->arg_defines( %{ $args{defines} || {} } );
 
   my %spec = (
     srcdir      => $srcdir,

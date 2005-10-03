@@ -74,6 +74,11 @@ sub arg_exec_file {
   return ('-o', $file);
 }
 
+sub arg_defines {
+  my ($self, %args) = @_;
+  return map "-D$_=$args{$_}", keys %args;
+}
+
 sub compile {
   my ($self, %args) = @_;
   die "Missing 'source' argument to compile()" unless defined $args{source};
@@ -86,7 +91,7 @@ sub compile {
     (@{$args{include_dirs} || []},
      $self->perl_inc());
   
-  my @defines = map "-D$_=$args{defines}{$_}", keys %{$args{defines} || {}};
+  my @defines = $self->arg_defines( %{$args{defines} || {}} );
   
   my @extra_compiler_flags = $self->split_like_shell($args{extra_compiler_flags});
   my @cccdlflags = $self->split_like_shell($cf->{cccdlflags});
