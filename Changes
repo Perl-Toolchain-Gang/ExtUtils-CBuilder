@@ -1,5 +1,11 @@
 Revision history for Perl extension ExtUtils::CBuilder.
 
+0.16
+
+ - Documented the existing 'quiet' parameter, which silences the
+   printing of system() commands. [Suggested by Yitzchak
+   Scott-Thoennes]
+
 0.15  Mon Oct  3 17:10:32 CDT 2005
 
  - Several OS/2 fixes have been made, including: 1) adding the

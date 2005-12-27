@@ -117,6 +117,12 @@ by the object, as in the following example:
   my $b = ExtUtils::CBuilder->new( config =>
                                    { ld => 'gcc' } );
 
+A C<quiet> parameter tells C<CBuilder> to not print its C<system()>
+commands before executing them:
+
+  # Be quieter than normal
+  my $b = ExtUtils::CBuilder->new( quiet => 1 );
+
 =item have_compiler
 
 Returns true if the current system has a working C compiler and
