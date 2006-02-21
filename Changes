@@ -2,6 +2,9 @@ Revision history for Perl extension ExtUtils::CBuilder.
 
 0.16
 
+ - Fix quoting of command line arguments on Windows. [Yitzchak
+   Scott-Thoennes]
+
  - Documented the existing 'quiet' parameter, which silences the
    printing of system() commands. [Suggested by Yitzchak
    Scott-Thoennes]
