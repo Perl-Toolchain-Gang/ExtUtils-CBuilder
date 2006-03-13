@@ -5,6 +5,10 @@ Revision history for Perl extension ExtUtils::CBuilder.
  - Fix quoting of command line arguments on Windows. [Yitzchak
    Scott-Thoennes]
 
+ - Provided a custom arg_defines() on VMS that does essentially the
+   same thing for /define that version 0.14 did for /include. [Craig
+   A. Berry]
+
  - Documented the existing 'quiet' parameter, which silences the
    printing of system() commands. [Suggested by Yitzchak
    Scott-Thoennes]
