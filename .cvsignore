@@ -5,3 +5,4 @@ ExtUtils-CBuilder*
 Build
 _build
 blib
+META.yml
