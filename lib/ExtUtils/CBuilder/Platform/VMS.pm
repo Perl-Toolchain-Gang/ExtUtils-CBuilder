@@ -21,7 +21,14 @@ sub arg_defines {
     $config_defines = "$1,";
   }
 
-  return ('/define=(' . $config_defines . join(',', map "\"$_=$args{$_}\"", keys %args) . ')');
+  return unless (scalar keys %args) || $config_defines;
+
+  return ('/define=(' 
+          . $config_defines 
+          . join(',', 
+                 map "\"$_" . ( length($args{$_}) ? "=$args{$_}" : '') . "\"", 
+                     keys %args) 
+          . ')');
 }
 
 sub arg_include_dirs {

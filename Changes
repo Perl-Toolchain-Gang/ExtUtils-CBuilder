@@ -1,5 +1,10 @@
 Revision history for Perl extension ExtUtils::CBuilder.
 
+0.17
+
+ - More fixing of the arg_defines() method on VMS. [Craig A. Berry and
+   John E. Malmberg]
+
 0.16  Mon Mar 13 17:08:21 CST 2006
 
  - Fix quoting of command line arguments on Windows. [Yitzchak
