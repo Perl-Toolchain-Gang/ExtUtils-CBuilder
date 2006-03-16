@@ -1,6 +1,6 @@
 Revision history for Perl extension ExtUtils::CBuilder.
 
-0.17
+0.17  Wed Mar 15 22:46:15 CST 2006
 
  - When we're being run from an uninstalled perl distribution
    (e.g. one that's in the process of being built and tested), we
