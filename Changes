@@ -2,6 +2,11 @@ Revision history for Perl extension ExtUtils::CBuilder.
 
 0.17
 
+ - When we're being run from an uninstalled perl distribution
+   (e.g. one that's in the process of being built and tested), we
+   search for perl first in the current working directory. [Randy
+   Sims]
+
  - More fixing of the arg_defines() method on VMS. [Craig A. Berry and
    John E. Malmberg]
 
