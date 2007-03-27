@@ -2,13 +2,16 @@ Revision history for Perl extension ExtUtils::CBuilder.
 
 0.19
 
+ - On Windows: embed manifest files in DLLs built with Module-Build
+   when using VC8. [Steve Hay]
+
  - Added a workaround for a config error on dec_osf: the linker is
    $Config{cc}, not $Config{ld}. [Jarkko Hietaniemi]
 
  - Borland's compiler "response files" will not pass through macro
    definitions that contain quotes. The quotes get stripped and there
    seems to be no way to escape them. So we leave macros on the
-   command line.
+   command line. [Randy W. Sims]
 
 0.18  Sat Mar 25 13:35:47 CST 2006
 
