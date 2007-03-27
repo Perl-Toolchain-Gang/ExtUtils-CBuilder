@@ -2,6 +2,12 @@ Revision history for Perl extension ExtUtils::CBuilder.
 
 0.19
 
+ - Various OS/2 fixes:
+   + Put .LIB file near .DEF file
+   + Got library-file building working better
+   + Handled libperl_overrides better
+   [Ilya Zakharevich]
+
  - On Windows: embed manifest files in DLLs built with Module-Build
    when using VC8. [Steve Hay]
 
