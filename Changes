@@ -2,6 +2,9 @@ Revision history for Perl extension ExtUtils::CBuilder.
 
 0.19
 
+ - Added a workaround for a config error on dec_osf: the linker is
+   $Config{cc}, not $Config{ld}. [Jarkko Hietaniemi]
+
  - Borland's compiler "response files" will not pass through macro
    definitions that contain quotes. The quotes get stripped and there
    seems to be no way to escape them. So we leave macros on the
