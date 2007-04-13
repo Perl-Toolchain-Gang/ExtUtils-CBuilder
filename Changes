@@ -1,5 +1,8 @@
 Revision history for Perl extension ExtUtils::CBuilder.
 
+ - Fixed a part of the manifest thingy that got broken on 64-bit
+   Windows platforms in version 0.18. [Steve Hay, Jan Dubois]
+
 0.18 - Mon Mar 26 21:29:09 2007
 
  - Various OS/2 fixes:
