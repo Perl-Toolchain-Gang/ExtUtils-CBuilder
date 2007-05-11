@@ -1,5 +1,9 @@
 Revision history for Perl extension ExtUtils::CBuilder.
 
+ - When building as part of the perl core (so this is irrelevant for
+   people downloading from CPAN) we now try a little harder to find
+   the perl sources. [Jos Boumans]
+
  - Fixed a part of the manifest thingy that got broken on 64-bit
    Windows platforms in version 0.18. [Steve Hay, Jan Dubois]
 
