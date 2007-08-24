@@ -1,7 +1,8 @@
 Revision history for Perl extension ExtUtils::CBuilder.
 
  - From bleadperl, a patch to clean up debug symbol files (.pdb for
-   VC++, .tds for BCC) when running have_compiler(). [Steve Peters]
+   VC++, .tds for BCC) when running have_compiler(). [Steve Hay &
+   Steve Peters]
 
 0.19 - Sun May 13 14:29:18 2007
 
