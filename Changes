@@ -1,5 +1,8 @@
 Revision history for Perl extension ExtUtils::CBuilder.
 
+ - Protect $., $@, $!, $^E, and $? from any clobbering that might
+   occur in our DESTROY method. [Zefram]
+
  - From bleadperl, a patch to clean up debug symbol files (.pdb for
    VC++, .tds for BCC) when running have_compiler(). [Steve Hay &
    Steve Peters]

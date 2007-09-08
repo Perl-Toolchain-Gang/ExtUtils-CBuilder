@@ -271,6 +271,7 @@ sub perl_inc {
 
 sub DESTROY {
   my $self = shift;
+  local($., $@, $!, $^E, $?);
   $self->cleanup();
 }
 
