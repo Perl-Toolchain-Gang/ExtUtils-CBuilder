@@ -13,6 +13,7 @@ my $build = Module::Build->new
 		      'Test' => 0,
 		     },
    create_makefile_pl => 'traditional',
+   create_readme => 1,
    meta_merge => {
 		  resources => {repository => 'http://svn.perl.org/modules/ExtUtils-CBuilder'},
 		 },
