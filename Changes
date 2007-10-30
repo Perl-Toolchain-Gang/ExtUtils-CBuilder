@@ -1,5 +1,8 @@
 Revision history for Perl extension ExtUtils::CBuilder.
 
+ - Clean up perl_src path using Cwd::realpath().  Only affects usage
+   as part of the perl core.
+
  - Protect $., $@, $!, $^E, and $? from any clobbering that might
    occur in our DESTROY method. [Zefram]
 

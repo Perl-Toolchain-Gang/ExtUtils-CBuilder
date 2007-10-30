@@ -8,6 +8,7 @@ my $build = Module::Build->new
 		'File::Basename' => 0,
 		'File::Spec' => 0,
 		'Text::ParseWords' => 0,
+		'Cwd' => 0,
 	       },
    build_requires => {
 		      'Test' => 0,

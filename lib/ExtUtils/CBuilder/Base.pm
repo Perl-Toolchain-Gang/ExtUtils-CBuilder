@@ -3,6 +3,7 @@ package ExtUtils::CBuilder::Base;
 use strict;
 use File::Spec;
 use File::Basename;
+use Cwd ();
 use Config;
 use Text::ParseWords;
 
@@ -252,7 +253,7 @@ sub perl_src {
 	&&
 	-f File::Spec->catfile($dir,"lib","Exporter.pm")
        ) {
-      return $dir;
+      return Cwd::realpath( $dir );
     }
 
     $dir = File::Spec->catdir($dir, $Updir);
