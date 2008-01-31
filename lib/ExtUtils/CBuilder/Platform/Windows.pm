@@ -119,7 +119,7 @@ sub compile {
     cflags      => [
                      $self->split_like_shell($cf->{ccflags}),
                      $self->split_like_shell($cf->{cccdlflags}),
-                     $self->split_like_shell($cf->{extra_compiler_flags}),
+                     $self->split_like_shell($args{extra_compiler_flags}),
                    ],
     optimize    => [ $self->split_like_shell($cf->{optimize})    ],
     defines     => \@defines,
