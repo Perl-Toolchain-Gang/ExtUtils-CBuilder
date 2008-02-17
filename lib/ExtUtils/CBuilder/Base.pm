@@ -8,7 +8,7 @@ use Config;
 use Text::ParseWords;
 
 use vars qw($VERSION);
-$VERSION = '0.22';
+$VERSION = '0.2201';
 
 sub new {
   my $class = shift;
