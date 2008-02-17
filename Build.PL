@@ -19,6 +19,7 @@ my $build = Module::Build->new
 		  resources => {repository => 'http://svn.perl.org/modules/ExtUtils-CBuilder'},
 		 },
    sign => 1,
+   installdirs => ($] >= 5.009003 ? 'core' : 'site'),
   );
 
 $build->create_build_script;

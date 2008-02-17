@@ -1,5 +1,8 @@
 Revision history for Perl extension ExtUtils::CBuilder.
 
+ - Will now install in the core perl lib directory when the user's
+   perl is new enough to have us in core. [Yi Ma Mao]
+
 0.22 - Fri Feb  8 21:52:21 2008
 
  - Replaced the split_like_shell() method on Windows with a

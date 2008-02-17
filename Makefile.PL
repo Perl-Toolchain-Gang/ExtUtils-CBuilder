@@ -11,7 +11,7 @@ WriteMakefile
                            'Test' => '0',
                            'Text::ParseWords' => '0'
                          },
-          'INSTALLDIRS' => 'site',
+          'INSTALLDIRS' => ($] >= 5.009003 ? 'perl' : 'site'),
           'EXE_FILES' => [],
           'PL_FILES' => {}
         )
