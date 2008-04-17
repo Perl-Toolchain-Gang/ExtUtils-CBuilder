@@ -618,7 +618,7 @@ sub format_linker_cmd {
     $spec{explib}             ,
     $spec{map_file} ? ('-Map', $spec{map_file}) : ''
   ) ];
-  
+
   return @cmds;
 }
 
