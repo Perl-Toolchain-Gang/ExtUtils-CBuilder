@@ -1,5 +1,8 @@
 Revision history for Perl extension ExtUtils::CBuilder.
 
+ - Fixed some problems (some old, some new) with Strawberry Perl on
+   Windows. [Alberto Simo~es]
+
  - Will now install in the core perl lib directory when the user's
    perl is new enough to have us in core. [Yi Ma Mao]
 

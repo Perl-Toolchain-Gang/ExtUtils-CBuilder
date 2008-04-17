@@ -523,16 +523,17 @@ sub format_compiler_cmd {
   # split off any -arguments included in cc
   my @cc = split / (?=-)/, $spec{cc};
 
-  return [ grep {defined && length} (
-    @cc, '-c'               ,
-    @{$spec{includes}}      ,
-    @{$spec{cflags}}        ,
-    @{$spec{optimize}}      ,
-    @{$spec{defines}}       ,
-    @{$spec{perlinc}}       ,
-    '-o', $spec{output}     ,
-    $spec{source}           ,
-  ) ];
+  return [join(" ",
+	grep {length} map {$a=$_;$a=~s/\t/ /g;$a=~s/^\s*//;$a=~s/\s*$//;$a} grep {defined} (
+    	@cc, '-c'               ,
+    	@{$spec{includes}}      ,
+    	@{$spec{cflags}}        ,
+    	@{$spec{optimize}}      ,
+    	@{$spec{defines}}       ,
+    	@{$spec{perlinc}}       ,
+    	'-o', $spec{output}     ,
+    	$spec{source}           ,
+  		))];
 }
 
 sub format_linker_cmd {
@@ -608,8 +609,8 @@ sub format_linker_cmd {
     $spec{explib}             ,
     $spec{map_file} ? ('-Map', $spec{map_file}) : ''
   ) ];
-
-  return @cmds;
+  
+  return map {[join(" ",@$_)]} @cmds;
 }
 
 sub write_linker_script {
