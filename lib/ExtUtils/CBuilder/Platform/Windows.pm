@@ -43,6 +43,16 @@ sub split_like_shell {
   return ($_);
 }
 
+sub do_system {
+  # See above
+  my $self = shift;
+  my $cmd = join(" ",
+		 grep length,
+		 map {$a=$_;$a=~s/\t/ /g;$a=~s/^\s+|\s+$//;$a}
+		 grep defined, @_);
+  return $self->SUPER::do_system($cmd);
+}
+
 sub arg_defines {
   my ($self, %args) = @_;
   s/"/\\"/g foreach values %args;
@@ -523,17 +533,16 @@ sub format_compiler_cmd {
   # split off any -arguments included in cc
   my @cc = split / (?=-)/, $spec{cc};
 
-  return [join(" ",
-	grep {length} map {$a=$_;$a=~s/\t/ /g;$a=~s/^\s*//;$a=~s/\s*$//;$a} grep {defined} (
-    	@cc, '-c'               ,
-    	@{$spec{includes}}      ,
-    	@{$spec{cflags}}        ,
-    	@{$spec{optimize}}      ,
-    	@{$spec{defines}}       ,
-    	@{$spec{perlinc}}       ,
-    	'-o', $spec{output}     ,
-    	$spec{source}           ,
-  		))];
+  return [ grep {defined && length} (
+    @cc, '-c'               ,
+    @{$spec{includes}}      ,
+    @{$spec{cflags}}        ,
+    @{$spec{optimize}}      ,
+    @{$spec{defines}}       ,
+    @{$spec{perlinc}}       ,
+    '-o', $spec{output}     ,
+    $spec{source}           ,
+  ) ];
 }
 
 sub format_linker_cmd {
@@ -610,7 +619,7 @@ sub format_linker_cmd {
     $spec{map_file} ? ('-Map', $spec{map_file}) : ''
   ) ];
   
-  return map {[join(" ",@$_)]} @cmds;
+  return @cmds;
 }
 
 sub write_linker_script {
