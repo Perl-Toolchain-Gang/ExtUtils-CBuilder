@@ -6,6 +6,7 @@ use File::Basename;
 use Cwd ();
 use Config;
 use Text::ParseWords;
+use IO::File;
 
 use vars qw($VERSION);
 $VERSION = '0.2201';
@@ -118,10 +119,8 @@ sub have_compiler {
   
   my $tmpfile = File::Spec->catfile(File::Spec->tmpdir, 'compilet.c');
   {
-    local *FH;
-    open FH, "> $tmpfile" or die "Can't create $tmpfile: $!";
-    print FH "int boot_compilet() { return 1; }\n";
-    close FH;
+    my $FH = IO::File->new("> $tmpfile") or die "Can't create $tmpfile: $!";
+    print $FH "int boot_compilet() { return 1; }\n";
   }
 
   my ($obj_file, @lib_files);
