@@ -1,6 +1,14 @@
 use Module::Build;
 
-my $build = Module::Build->new
+my $class = Module::Build->subclass(code => <<'EOF');
+  sub do_create_makefile_pl {
+    my $self = shift;
+    $self->SUPER::do_create_makefile_pl(fh => $fh);
+    $self->do_system(qw(perl -pi -e), q{s/'INSTALLDIRS' => 'site'/'INSTALLDIRS' => (\$] >= 5.009003 ? 'perl' : 'site')/}, 'Makefile.PL');
+  }
+EOF
+
+my $build = $class->new
   (
    module_name => 'ExtUtils::CBuilder',
    license => 'perl',
@@ -9,6 +17,7 @@ my $build = Module::Build->new
 		'File::Spec' => 0,
 		'Text::ParseWords' => 0,
 		'Cwd' => 0,
+		'IO::File' => 0,
 	       },
    build_requires => {
 		      'Test' => 0,
