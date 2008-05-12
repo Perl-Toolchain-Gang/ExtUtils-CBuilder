@@ -1,5 +1,7 @@
 Revision history for Perl extension ExtUtils::CBuilder.
 
+ - Added 'gnu' and 'gnukfreebsd' as Unix variants. [Niko Tyni]
+
  - Brought in some VMS fixes from bleadperl: "Correct and complete
    CBuilder's handling of external libraries when linking on VMS."
    [Craig Berry]
