@@ -19,8 +19,9 @@ sub link_executable {
 sub link {
   my ($self, %args) = @_;
 
+  my $lib = $self->{config}{useshrplib} ? 'libperl.dll.a' : 'libperl.a';
   $args{extra_linker_flags} = [
-    File::Spec->catdir($self->perl_inc(), 'libperl.dll.a'),
+    File::Spec->catdir($self->perl_inc(), $lib),
     $self->split_like_shell($args{extra_linker_flags})
   ];
 

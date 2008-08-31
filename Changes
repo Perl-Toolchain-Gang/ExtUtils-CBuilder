@@ -1,5 +1,9 @@
 Revision history for Perl extension ExtUtils::CBuilder.
 
+ - On Cygwin, examine $Config{useshrplib} to see whether we're
+   supposed to be linking with a shared perl library or not. [Reini
+   Urban]
+
 0.24 - Fri Aug 15 22:01:48 2008
 
  - Added 'gnu' and 'gnukfreebsd' as Unix variants. [Niko Tyni]
