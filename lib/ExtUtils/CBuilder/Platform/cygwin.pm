@@ -8,14 +8,6 @@ use vars qw($VERSION @ISA);
 $VERSION = '0.24';
 @ISA = qw(ExtUtils::CBuilder::Platform::Unix);
 
-sub link_executable {
-  my $self = shift;
-  # $Config{ld} is set up as a special script for building
-  # perl-linkable libraries.  We don't want that here.
-  local $self->{config}{ld} = 'gcc';
-  return $self->SUPER::link_executable(@_);
-}
-
 sub link {
   my ($self, %args) = @_;
 

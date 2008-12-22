@@ -9,9 +9,14 @@ $VERSION = '0.24';
 
 sub link_executable {
   my $self = shift;
-  # $Config{cc} is usually a better bet for linking executables than $Config{ld}
+
+  # On some platforms (which ones??) $Config{cc} seems to be a better
+  # bet for linking executables than $Config{ld}.  Cygwin is a notable
+  # exception.
   local $self->{config}{ld} =
-    $self->{config}{cc} . " " . $self->{config}{ldflags};
+    $self->isa('ExtUtils::CBuilder::Platform::cygwin')
+    ? $self->{config}{ld}
+    : ($self->{config}{cc} . " " . $self->{config}{ldflags});
   return $self->SUPER::link_executable(@_);
 }
 
