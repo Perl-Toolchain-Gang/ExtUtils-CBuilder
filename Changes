@@ -1,5 +1,8 @@
 Revision history for Perl extension ExtUtils::CBuilder.
 
+ - On Windows, don't generate "mt" command when CRT is statically
+   linked. [Jan Dubois]
+
  - On Cygwin, examine $Config{useshrplib} to see whether we're
    supposed to be linking with a shared perl library or not. [Reini
    Urban]
