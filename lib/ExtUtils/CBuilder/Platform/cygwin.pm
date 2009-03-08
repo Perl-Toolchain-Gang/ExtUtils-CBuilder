@@ -8,6 +8,13 @@ use vars qw($VERSION @ISA);
 $VERSION = '0.24';
 @ISA = qw(ExtUtils::CBuilder::Platform::Unix);
 
+sub link_executable {
+  my $self = shift;
+  # $Config{ld} is okay. Circumvent the Unix ld=cc override in the superclass.
+  local $self->{config}{cc} = $self->{config}{ld};
+  return $self->SUPER::link_executable(@_);
+}
+
 sub link {
   my ($self, %args) = @_;
 

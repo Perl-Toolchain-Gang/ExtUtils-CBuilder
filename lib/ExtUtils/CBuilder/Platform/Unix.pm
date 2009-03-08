@@ -14,9 +14,7 @@ sub link_executable {
   # bet for linking executables than $Config{ld}.  Cygwin is a notable
   # exception.
   local $self->{config}{ld} =
-    $self->isa('ExtUtils::CBuilder::Platform::cygwin')
-    ? $self->{config}{ld}
-    : ($self->{config}{cc} . " " . $self->{config}{ldflags});
+    $self->{config}{cc} . " " . $self->{config}{ldflags};
   return $self->SUPER::link_executable(@_);
 }
 
