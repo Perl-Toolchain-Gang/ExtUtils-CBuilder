@@ -1,0 +1,6 @@
+files:
+ lib/ExtUtils/CBuilder.pm: lib/ExtUtils/CBuilder.pm
+ Changes: lib/ExtUtils/CBuilder/Changes
+dirs-recursive:
+ t/: lib/ExtUtils/CBuilder/t/
+ lib/ExtUtils/CBuilder/: lib/ExtUtils/CBuilder/
