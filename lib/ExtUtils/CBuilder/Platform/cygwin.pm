@@ -13,7 +13,7 @@ sub link {
 
   my $lib = $self->{config}{useshrplib} ? 'libperl.dll.a' : 'libperl.a';
   $args{extra_linker_flags} = [
-    File::Spec->catdir($self->perl_inc(), $lib),
+    File::Spec->catfile($self->perl_inc(), $lib),
     $self->split_like_shell($args{extra_linker_flags})
   ];
 
