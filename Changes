@@ -1,5 +1,7 @@
 Revision history for Perl extension ExtUtils::CBuilder.
 
+0.25 - coming soon
+
 0.24_01 - Sun Mar  8 14:50:10 2009
 
  - On Windows, don't generate "mt" command when CRT is statically
