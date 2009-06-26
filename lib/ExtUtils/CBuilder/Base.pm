@@ -9,7 +9,7 @@ use Text::ParseWords;
 use IO::File;
 
 use vars qw($VERSION);
-$VERSION = '0.24_01';
+$VERSION = '0.25';
 
 sub new {
   my $class = shift;
