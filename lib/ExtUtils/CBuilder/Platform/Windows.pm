@@ -10,7 +10,7 @@ use ExtUtils::CBuilder::Base;
 use IO::File;
 
 use vars qw($VERSION @ISA);
-$VERSION = '0.25';
+$VERSION = '0.25_01';
 @ISA = qw(ExtUtils::CBuilder::Base);
 
 sub new {
