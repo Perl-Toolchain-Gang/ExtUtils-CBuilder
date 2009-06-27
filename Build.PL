@@ -21,7 +21,7 @@ my $build = $class->new
 		'IO::File' => 0,
 	       },
    build_requires => {
-		      'Test' => 0,
+		      'Test::More' => 0.47,
 		     },
    create_makefile_pl => 'traditional',
    create_readme => 1,
