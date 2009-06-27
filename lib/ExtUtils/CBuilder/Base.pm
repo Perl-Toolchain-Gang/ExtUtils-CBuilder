@@ -117,22 +117,36 @@ sub have_compiler {
   my ($self) = @_;
   return $self->{have_compiler} if defined $self->{have_compiler};
 
-  my $tmpfile = File::Spec->catfile(File::Spec->tmpdir, 'compilet.c');
-  {
-    my $FH = IO::File->new("> $tmpfile") or die "Can't create $tmpfile: $!";
-    print $FH "int boot_compilet() { return 1; }\n";
-  }
+  my $result;
+  my $attempts = 3;
+  # tmpdir has issues for some people so fall back to current dir
+  DIR: for my $dir ( File::Spec->tmpdir, '.' ) {
 
-  my ($obj_file, @lib_files);
-  eval {
-    local $^W = 0;
-    $obj_file = $self->compile(source => $tmpfile);
-    @lib_files = $self->link(objects => $obj_file, module_name => 'compilet');
-  };
-  my $result = $@ ? 0 : 1;
+    # don't clobber existing files (rare, but possible)
+    my $rand = int(rand(2**31));
+    my $tmpfile = File::Spec->catfile($dir, "compilet-$rand.c");
+    if ( -e $tmpfile ) {
+      redo DIR if $attempts--;
+      next DIR;
+    }
 
-  foreach (grep defined, $tmpfile, $obj_file, @lib_files) {
-    1 while unlink;
+    {
+      my $FH = IO::File->new("> $tmpfile") or die "Can't create $tmpfile: $!";
+      print $FH "int boot_compilet() { return 1; }\n";
+    }
+
+    my ($obj_file, @lib_files);
+    eval {
+      local $^W = 0;
+      $obj_file = $self->compile(source => $tmpfile);
+      @lib_files = $self->link(objects => $obj_file, module_name => 'compilet');
+    };
+    $result = $@ ? 0 : 1;
+
+    foreach (grep defined, $tmpfile, $obj_file, @lib_files) {
+      1 while unlink;
+    }
+    last DIR if $result;
   }
 
   return $self->{have_compiler} = $result;

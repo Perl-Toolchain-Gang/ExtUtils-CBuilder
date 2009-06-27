@@ -130,7 +130,8 @@ commands before executing them:
 
 Returns true if the current system has a working C compiler and
 linker, false otherwise.  To determine this, we actually compile and
-link a sample C library.
+link a sample C library.  The sample will be compiled in the system
+tempdir or, if that fails for some reason, in the current directory.
 
 =item compile
 

@@ -1,6 +1,15 @@
 Revision history for Perl extension ExtUtils::CBuilder.
 
-0.25_01 - 
+0.25_01 -
+
+ - Changed test library to Test::More
+
+ - Added tests for have_compiler
+
+ - Skips tests that need a compiler if have_compiler is false
+
+ - have_compiler will try to compile in the current directory
+   if compiling in tmpdir fails for whatever reason
 
 0.25 - Fri Jun 26 16:18:13 EDT 2009
 
