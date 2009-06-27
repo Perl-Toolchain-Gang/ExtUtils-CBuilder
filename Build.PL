@@ -12,6 +12,7 @@ my $build = $class->new
   (
    module_name => 'ExtUtils::CBuilder',
    license => 'perl',
+   auto_configure_requires => 0,
    requires => {
 		'File::Basename' => 0,
 		'File::Spec' => 0,
