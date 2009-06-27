@@ -116,7 +116,7 @@ sub compile {
 sub have_compiler {
   my ($self) = @_;
   return $self->{have_compiler} if defined $self->{have_compiler};
-  
+
   my $tmpfile = File::Spec->catfile(File::Spec->tmpdir, 'compilet.c');
   {
     my $FH = IO::File->new("> $tmpfile") or die "Can't create $tmpfile: $!";
@@ -125,16 +125,17 @@ sub have_compiler {
 
   my ($obj_file, @lib_files);
   eval {
+    local $^W = 0;
     $obj_file = $self->compile(source => $tmpfile);
     @lib_files = $self->link(objects => $obj_file, module_name => 'compilet');
   };
-  warn $@ if $@;
-  my $result = $self->{have_compiler} = $@ ? 0 : 1;
-  
+  my $result = $@ ? 0 : 1;
+
   foreach (grep defined, $tmpfile, $obj_file, @lib_files) {
     1 while unlink;
   }
-  return $result;
+
+  return $self->{have_compiler} = $result;
 }
 
 sub lib_file {
