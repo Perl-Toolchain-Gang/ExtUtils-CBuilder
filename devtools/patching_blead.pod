@@ -24,6 +24,8 @@ tarball from CPAN.
 Run the add-packages.pl program from ~/git/perl/Porting to create a 
 new git branch and copy in ExtUtils::CBuilder files.  
 
+  $ perl ~/git/perl/Porting/add-package.pl -v -r ~/git/perl 
+
 =head2 Verifying and editing the branch
 
 After add-packages.pl finishes, ~/git/perl will be on the new branch. Verify
@@ -84,7 +86,7 @@ For  example:
 
 Git can automatically create the patch email for perl5-porters:
 
-  $ git format-patch origin
+  $ git format-patch blead
 
 This creates a single '0001...' email message file.  If you have
 configured your perl git repository for sending email direct to
