@@ -2,6 +2,10 @@ Revision history for Perl extension ExtUtils::CBuilder.
 
 0.26_01 - 
 
+ Bugs fixed:
+ - On VMS, cleans up extra files generated during testing
+   [John E. Malmberg, Craig Berry]
+
 0.26 - Mon Jun 29 20:11:52 EDT 2009
 
  - No changes from 0.25_01
