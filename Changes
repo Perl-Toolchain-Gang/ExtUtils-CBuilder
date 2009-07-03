@@ -2,6 +2,9 @@ Revision history for Perl extension ExtUtils::CBuilder.
 
 0.26_02 - 
 
+ Bugs fixed:
+ - Fixed 00-have-compiler.t if $^X is a relative path [David Wheeler]
+
 0.2601 - Wed Jul  1 09:37:39 EDT 2009
 
  Bugs fixed:
