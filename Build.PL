@@ -4,7 +4,7 @@ my $class = Module::Build->subclass(code => <<'EOF');
   sub do_create_makefile_pl {
     my $self = shift;
     $self->SUPER::do_create_makefile_pl(fh => $fh);
-    $self->do_system(qw(perl -pi -e), q{s/'INSTALLDIRS' => 'site'/'INSTALLDIRS' => (\$] >= 5.009003 ? 'perl' : 'site')/}, 'Makefile.PL');
+    $self->do_system(qw(perl -pi -e), q{s/'INSTALLDIRS' => '\w+'/'INSTALLDIRS' => (\$] >= 5.009003 ? 'perl' : 'site')/}, 'Makefile.PL');
   }
 EOF
 
