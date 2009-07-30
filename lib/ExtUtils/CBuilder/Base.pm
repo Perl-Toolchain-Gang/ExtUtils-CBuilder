@@ -98,6 +98,7 @@ sub compile {
   my @extra_compiler_flags = $self->split_like_shell($args{extra_compiler_flags});
   my @cccdlflags = $self->split_like_shell($cf->{cccdlflags});
   my @ccflags = $self->split_like_shell($cf->{ccflags});
+  push @ccflags, qw/-x c++/ if $args{'C++'};
   my @optimize = $self->split_like_shell($cf->{optimize});
   my @flags = (@include_dirs, @defines, @cccdlflags, @extra_compiler_flags,
 	       $self->arg_nolink,
@@ -114,7 +115,7 @@ sub compile {
 }
 
 sub have_compiler {
-  my ($self) = @_;
+  my ($self, $is_cplusplus) = @_;
   return $self->{have_compiler} if defined $self->{have_compiler};
 
   my $result;
@@ -125,6 +126,7 @@ sub have_compiler {
     # don't clobber existing files (rare, but possible)
     my $rand = int(rand(2**31));
     my $tmpfile = File::Spec->catfile($dir, "compilet-$rand.c");
+    $tmpfile .= "c" if $is_cplusplus;
     if ( -e $tmpfile ) {
       redo DIR if $attempts--;
       next DIR;
@@ -132,13 +134,18 @@ sub have_compiler {
 
     {
       my $FH = IO::File->new("> $tmpfile") or die "Can't create $tmpfile: $!";
-      print $FH "int boot_compilet() { return 1; }\n";
+      if ( $is_cplusplus ) {
+        print $FH "class Bogus { public: int boot_compilet() { return 1; } };\n";
+      }
+      else {
+        print $FH "int boot_compilet() { return 1; }\n";
+      }
     }
 
     my ($obj_file, @lib_files);
     eval {
       local $^W = 0;
-      $obj_file = $self->compile(source => $tmpfile);
+      $obj_file = $self->compile('C++' => $is_cplusplus, source => $tmpfile);
       @lib_files = $self->link(objects => $obj_file, module_name => 'compilet');
     };
     $result = $@ ? 0 : 1;
@@ -150,6 +157,11 @@ sub have_compiler {
   }
 
   return $self->{have_compiler} = $result;
+}
+
+sub have_cplusplus {
+  push @_, 1;
+  goto &have_compiler;
 }
 
 sub lib_file {
