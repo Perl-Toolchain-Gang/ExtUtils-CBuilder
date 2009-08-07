@@ -11,5 +11,6 @@ CVS
 ^ExtUtils-CBuilder
 ^\.
 ^t/compilet\b
-\.cvsignore$
+^\.cvsignore$
 \.svn
+\.bak$
