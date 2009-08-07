@@ -1,5 +1,7 @@
 Revision history for Perl extension ExtUtils::CBuilder.
 
+0.18 - Mon Mar 26 21:29:09 2007
+
  - Various OS/2 fixes:
    + Put .LIB file near .DEF file
    + Got library-file building working better
