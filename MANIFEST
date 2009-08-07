@@ -1,3 +1,4 @@
+bleadcheck.pl
 Build.PL
 Changes
 INSTALL
@@ -6,6 +7,7 @@ lib/ExtUtils/CBuilder/Base.pm
 lib/ExtUtils/CBuilder/Platform/aix.pm
 lib/ExtUtils/CBuilder/Platform/cygwin.pm
 lib/ExtUtils/CBuilder/Platform/darwin.pm
+lib/ExtUtils/CBuilder/Platform/dec_osf.pm
 lib/ExtUtils/CBuilder/Platform/os2.pm
 lib/ExtUtils/CBuilder/Platform/Unix.pm
 lib/ExtUtils/CBuilder/Platform/VMS.pm
