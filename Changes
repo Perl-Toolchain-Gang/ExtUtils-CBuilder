@@ -1,5 +1,7 @@
 Revision history for Perl extension ExtUtils::CBuilder.
 
+0.22 - Fri Feb  8 21:52:21 2008
+
  - Replaced the split_like_shell() method on Windows with a
    near-no-op, which is probably more correct and has the benefit of
    not messing up UNC paths. [John R. LoVerso, see
