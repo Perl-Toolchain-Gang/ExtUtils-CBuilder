@@ -12,3 +12,4 @@ CVS
 ^\.
 ^t/compilet\b
 \.cvsignore$
+\.svn
