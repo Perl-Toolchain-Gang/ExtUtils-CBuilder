@@ -5,6 +5,7 @@ WriteMakefile
           'NAME' => 'ExtUtils::CBuilder',
           'VERSION_FROM' => 'lib/ExtUtils/CBuilder.pm',
           'PREREQ_PM' => {
+                           'Cwd' => '0',
                            'File::Basename' => '0',
                            'File::Spec' => '0',
                            'Test' => '0',
