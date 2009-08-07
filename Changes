@@ -1,5 +1,7 @@
 Revision history for Perl extension ExtUtils::CBuilder.
 
+0.23 - Sat Apr 19 22:28:03 2008
+
  - Fixed some problems (some old, some new) with Strawberry Perl on
    Windows. [Alberto Simo~es]
 
