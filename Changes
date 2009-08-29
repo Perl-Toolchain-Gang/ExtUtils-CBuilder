@@ -1,5 +1,9 @@
 Revision history for Perl extension ExtUtils::CBuilder.
 
+ Bugs fixed:
+ - Fixed linking error on Win32 with gcc compiler (RT#49000)
+   [kmx]
+
 0.2603 - Sat Jul 18 06:56:06 EDT 2009
 
  Bugs fixed:
