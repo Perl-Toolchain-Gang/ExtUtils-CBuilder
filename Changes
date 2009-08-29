@@ -5,6 +5,12 @@ Revision history for Perl extension ExtUtils::CBuilder.
  Enhancements:
  - Added 'have_cplusplus()' method to check for C++ support
 
+0.260301 - Sat Aug 29 11:04:41 EDT 2009
+
+ Bugs fixed:
+ - Fixed linking error on Win32 with gcc compiler (RT#49000)
+   [kmx]
+
 0.2603 - Sat Jul 18 06:56:06 EDT 2009
 
  Bugs fixed:
