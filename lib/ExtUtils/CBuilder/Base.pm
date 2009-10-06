@@ -21,6 +21,7 @@ sub new {
   while (my ($k,$v) = each %Config) {
     $self->{config}{$k} = $v unless exists $self->{config}{$k};
   }
+  $self->{config}{cc} = $ENV{CC} if exists $ENV{CC};
   return $self;
 }
 
