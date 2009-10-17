@@ -538,6 +538,7 @@ sub format_compiler_cmd {
 
 sub format_linker_cmd {
   my ($self, %spec) = @_;
+  my $cf = $self->{config};
 
   # The Config.pm variable 'libperl' is hardcoded to the full name
   # of the perl import library (i.e. 'libperl56.a'). GCC will not
@@ -565,9 +566,11 @@ sub format_linker_cmd {
 
   my @cmds; # Stores the series of commands needed to build the module.
 
+  my $DLLTOOL = $cf->{dlltool} || 'dlltool';
+
   push @cmds, [
-    'dlltool', '--def'        , $spec{def_file},
-               '--output-exp' , $spec{explib}
+    $DLLTOOL, '--def'        , $spec{def_file},
+              '--output-exp' , $spec{explib}
   ];
 
   # split off any -arguments included in ld
@@ -590,9 +593,9 @@ sub format_linker_cmd {
   ) ];
 
   push @cmds, [
-    'dlltool', '--def'        , $spec{def_file},
-               '--output-exp' , $spec{explib},
-               '--base-file'  , $spec{base_file}
+    $DLLTOOL, '--def'        , $spec{def_file},
+              '--output-exp' , $spec{explib},
+              '--base-file'  , $spec{base_file}
   ];
 
   push @cmds, [ grep {defined && length} (
