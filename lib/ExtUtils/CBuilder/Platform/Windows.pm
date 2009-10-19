@@ -651,7 +651,7 @@ sub write_linker_script {
   ) . ")\n";
 
   #it is important to keep the order 1.linker_script - 2.other_ldflags
-  @{$spec{other_ldflags}} = ( '"' . $script . '"', @{$spec{other_ldflags}} );
+  unshift @{$spec{other_ldflags}}, '"' . $script . '"';
 
   return %spec;
 }
