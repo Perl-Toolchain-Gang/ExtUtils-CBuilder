@@ -9,6 +9,8 @@ Revision history for Perl extension ExtUtils::CBuilder.
  Bugs fixed:
  - Fixed link executable command for Win32 MSVC (RT#40819) [Cosimo
    Streppone]
+ - Removed MSVC version check when embedding a manifest file
+   (RT #43002) [Steve Hay]
 
  Other:
  - Split Windows compiler driver packages into individual *.pm files
