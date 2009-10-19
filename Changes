@@ -6,6 +6,13 @@ Revision history for Perl extension ExtUtils::CBuilder.
  - Added 'have_cplusplus()' method to check for C++ support
  - Added patches for building Perl with mingw64 [Sisyphus]
 
+ Bugs fixed:
+ - Fixed link executable command for Win32 MSVC (RT#40819) [Cosimo
+   Streppone]
+
+ Other:
+ - Split Windows compiler driver packages into individual *.pm files
+
 0.260301 - Sat Aug 29 11:04:41 EDT 2009
 
  Bugs fixed:
