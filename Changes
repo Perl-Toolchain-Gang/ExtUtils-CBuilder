@@ -5,6 +5,7 @@ Revision history for Perl extension ExtUtils::CBuilder.
  Enhancements:
  - Added 'have_cplusplus()' method to check for C++ support
  - Added patches for building Perl with mingw64 [Sisyphus]
+ - Allow CC environment variable to override $Config{cc}
 
  Bugs fixed:
  - Fixed link executable command for Win32 MSVC (RT#40819) [Cosimo
