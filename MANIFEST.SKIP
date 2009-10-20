@@ -38,3 +38,4 @@ doc_check.pl$
 ^[^/]+\.patch$
 ^devtools
 ^cover_db
+^MYMETA.yml$
