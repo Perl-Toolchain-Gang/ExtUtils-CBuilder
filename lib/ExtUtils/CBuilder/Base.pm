@@ -146,6 +146,7 @@ sub have_compiler {
     my ($obj_file, @lib_files);
     eval {
       local $^W = 0;
+      local $self->{quiet} = 1;
       $obj_file = $self->compile('C++' => $is_cplusplus, source => $tmpfile);
       @lib_files = $self->link(objects => $obj_file, module_name => 'compilet');
     };
