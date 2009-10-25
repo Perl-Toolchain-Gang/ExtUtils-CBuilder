@@ -1,6 +1,9 @@
 Revision history for Perl extension ExtUtils::CBuilder.
 
-0.26_05 - 
+0.26_05 - Sun Oct 25 17:29:02 EDT 2009
+
+ Bugs fixed:
+ - Fixed t/02link.t failures on cygwin with Perl 5.8 [David Golden]
 
  Other:
  - Made have_compiler (and have_cplusplus) quiet without echoing
