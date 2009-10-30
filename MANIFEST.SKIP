@@ -1,3 +1,4 @@
+Build.PL    # Avoid circular dependencies
 ^_build
 ^inc
 ^kwiki

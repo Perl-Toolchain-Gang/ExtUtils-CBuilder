@@ -1,8 +1,10 @@
 Revision history for Perl extension ExtUtils::CBuilder.
 
-0.27 - Thu Oct 29 21:19:37 EDT 2009
+0.27 - 
 
- - No changes from 0.26_05
+ Other:
+ - Removed Build.PL to avoid creating a circular dependency
+ - Added version numbers to Windows compiler driver modules
 
 0.26_05 - Sun Oct 25 17:29:02 EDT 2009
 

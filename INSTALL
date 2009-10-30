@@ -1,12 +1,5 @@
            Installation instructions for ExtUtils::CBuilder
 
-To install this module, do this:
-
-  perl Build.PL
-  ./Build
-  ./Build test
-  ./Build install
-
 Alternatively, if you don't want to use the newer Module::Build module,
 you can follow the standard steps for installing most Perl modules:
 
