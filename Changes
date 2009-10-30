@@ -1,6 +1,6 @@
 Revision history for Perl extension ExtUtils::CBuilder.
 
-0.27 - 
+0.27 - Thu Oct 29 21:29:56 EDT 2009
 
  Other:
  - Removed Build.PL to avoid creating a circular dependency
