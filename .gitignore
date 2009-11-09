@@ -2,6 +2,8 @@
 *.old
 *.tmp
 *.tar.gz
+*.rej
+*.orig
 *~
 /Build
 /Build.bat
