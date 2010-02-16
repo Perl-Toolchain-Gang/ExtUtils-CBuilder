@@ -1,6 +1,10 @@
 Revision history for Perl extension ExtUtils::CBuilder.
 
-0.2701 - 
+0.2701 - Tue Feb 16 09:12:45 EST 2010
+
+ Bugs fixed:
+ - compile() now accepts both string & array for 'include_dirs'
+   argument, as documented.(RT#54606) [Alberto Simões]
 
 0.27 - Thu Oct 29 21:29:56 EDT 2009
 
@@ -38,10 +42,6 @@ Revision history for Perl extension ExtUtils::CBuilder.
  Bugs fixed:
  - Fixed linking error on Win32 with gcc compiler (RT#49000)
    [kmx]
-
- Bugs fixed:
- - compile() now accepts both string & array for 'include_dirs'
-   argument, as documented.(RT#54606) [Alberto Simões]
 
 0.2603 - Sat Jul 18 06:56:06 EDT 2009
 
