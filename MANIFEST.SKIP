@@ -1,4 +1,4 @@
-Build.PL    # Avoid circular dependencies
+^Build\.PL    # Avoid circular dependencies
 ^_build
 ^inc
 ^kwiki
@@ -21,7 +21,6 @@ CVS
 Makefile$
 /cover_db/
 bleadcheck\.pl$
-
 ^TODO$
 ^CPANTEST
 \.c$
