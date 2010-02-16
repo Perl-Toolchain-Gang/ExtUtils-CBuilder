@@ -37,6 +37,10 @@ Revision history for Perl extension ExtUtils::CBuilder.
  - Fixed linking error on Win32 with gcc compiler (RT#49000)
    [kmx]
 
+ Bugs fixed:
+ - compile() now accepts both string & array for 'include_dirs'
+   argument, as documented.(RT#54606) [Alberto Simões]
+
 0.2603 - Sat Jul 18 06:56:06 EDT 2009
 
  Bugs fixed:

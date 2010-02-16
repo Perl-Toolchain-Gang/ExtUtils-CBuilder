@@ -23,7 +23,7 @@ if ( ! $b->have_compiler ) {
   plan skip_all => "no compiler available for testing";
 }
 else {
-  plan tests => 10;
+  plan tests => 12;
 }
 
 ok $b, "created EU::CB object";
@@ -69,4 +69,25 @@ SKIP: {
   is( @words, 2 );
   is( $words[0], 'foo' );
   is( $words[1], 'bar' );
+}
+
+# include_dirs should be settable as string or list
+{
+  package Sub;
+  use base 'ExtUtils::CBuilder';
+  my $saw = 0;
+  sub do_system {1}
+  sub arg_include_dirs {
+    $saw = 1 if grep {$_ eq 'another dir'} @_;
+  }
+
+  package main;
+  my $s = Sub->new();
+  $s->compile(source => 'foo',
+	      include_dirs => 'another dir');
+  ok $saw;
+
+  $s->compile(source => 'foo',
+	      include_dirs => ['a dir', 'another dir']);
+  ok $saw;
 }
