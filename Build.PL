@@ -26,7 +26,7 @@ my $build = $class->new
    create_makefile_pl => 'traditional',
    create_readme => 1,
    meta_merge => {
-		  resources => {repository => 'http://svn.perl.org/modules/ExtUtils-CBuilder'},
+		  resources => {repository => 'git://github.com/dagolden/extutils-cbuilder.git'},
 		 },
    sign => 1,
    installdirs => ($] >= 5.009003 ? 'core' : 'site'),
