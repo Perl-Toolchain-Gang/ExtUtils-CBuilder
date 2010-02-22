@@ -74,11 +74,12 @@ SKIP: {
 # include_dirs should be settable as string or list
 {
   package Sub;
-  use base 'ExtUtils::CBuilder';
+  use vars '@ISA';
+  @ISA = ('ExtUtils::CBuilder');
   my $saw = 0;
-  sub do_system {1}
-  sub arg_include_dirs {
-    $saw = 1 if grep {$_ eq 'another dir'} @_;
+  sub do_system {
+    $saw = 1 if grep {$_ =~ /another dir/} @_;
+    return 1;
   }
 
   package main;
@@ -87,6 +88,7 @@ SKIP: {
 	      include_dirs => 'another dir');
   ok $saw;
 
+  $saw = 0;
   $s->compile(source => 'foo',
 	      include_dirs => ['a dir', 'another dir']);
   ok $saw;
