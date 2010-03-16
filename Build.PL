@@ -28,7 +28,6 @@ my $build = $class->new
    meta_merge => {
 		  resources => {repository => 'git://github.com/dagolden/extutils-cbuilder.git'},
 		 },
-   sign => 1,
    installdirs => ($] >= 5.009003 ? 'core' : 'site'),
   );
 
