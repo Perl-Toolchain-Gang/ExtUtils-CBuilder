@@ -1,6 +1,11 @@
 Revision history for Perl extension ExtUtils::CBuilder.
 
 0.2704 - 
+  - handle c compiler and c++ compiler separately
+    => require IPC::Cmd for that [Jens Rehsack]
+  - rely on File::Temp::tempfile and File::Spec::tmpdir to
+    get unique file name for checking for compiler
+    ==> require PathTools>=3.13 and File::Temp for that [Jens Rehsack]
 
 0.2703 - Tue Mar 16 17:10:55 EDT 2010
 
