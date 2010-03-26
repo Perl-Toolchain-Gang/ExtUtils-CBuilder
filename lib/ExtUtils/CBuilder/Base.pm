@@ -8,9 +8,17 @@ use Config;
 use Text::ParseWords;
 use IO::File;
 use Data::Dumper;$Data::Dumper::Indent=1;
+use IPC::Cmd qw(can_run);
 
 use vars qw($VERSION);
 $VERSION = '0.2704';
+
+my %cc2cxx = (
+    cc => [ 'c++', 'CC', ], # http://developers.sun.com/sunstudio/documentation/product/compiler.jsp
+    gcc => [ 'g++' ], # http://gcc.gnu.org/
+    xlc => [ 'xlC' ], # http://publib.boulder.ibm.com/infocenter/comphelp/v101v121/index.jsp
+    xlc_r => [ 'xlC_r' ], # http://publib.boulder.ibm.com/infocenter/comphelp/v101v121/index.jsp
+);
 
 sub new {
   my $class = shift;
@@ -23,6 +31,26 @@ sub new {
     $self->{config}{$k} = $v unless exists $self->{config}{$k};
   }
   $self->{config}{cc} = $ENV{CC} if exists $ENV{CC};
+  $self->{config}{ccflags} = $ENV{CFLAGS} if exists $ENV{CFLAGS};
+  $self->{config}{cxx} = $ENV{CXX} if exists $ENV{CXX};
+  $self->{config}{cxxflags} = $ENV{CXXFLAGS} if exists $ENV{CXXFLAGS};
+  $self->{config}{ld} = $ENV{LD} if exists $ENV{LD};
+  $self->{config}{ldflags} = $ENV{LDFLAGS} if exists $ENV{LDFLAGS};
+
+  unless ( exists $self->{config}{cxx} ) {
+    my $knowncc = basename($self->{config}{cc});
+    foreach my $cxx (@{$cc2cxx{$knowncc}}) {
+      if( can_run( $cxx ) ) {
+        $self->{config}{cxx} = $cxx;
+	last;
+      }
+    }
+    unless ( exists $self->{config}{cxx} ) {
+      $self->{config}{cxx} = $self->{config}{cc};
+      $self->{config}{cxxflags} = join( ' ', '-x c++', $self->{config}{cflags} );
+    }
+  }
+
   return $self;
 }
 
@@ -46,6 +74,10 @@ sub cleanup {
   foreach my $file (keys %{$self->{files_to_clean}}) {
     unlink $file;
   }
+}
+
+sub get_config {
+    return %{ $_[0]->{config} };
 }
 
 sub object_file {
@@ -108,8 +140,7 @@ sub compile {
   my @extra_compiler_flags =
     $self->split_like_shell($args{extra_compiler_flags});
   my @cccdlflags = $self->split_like_shell($cf->{cccdlflags});
-  my @ccflags = $self->split_like_shell($cf->{ccflags});
-  push @ccflags, qw/-x c++/ if $args{'C++'};
+  my @ccflags = $self->split_like_shell($args{'C++'} ? $cf->{cxxflags} : $cf->{ccflags});
   my @optimize = $self->split_like_shell($cf->{optimize});
   my @flags = (
     @include_dirs,
@@ -121,6 +152,7 @@ sub compile {
     @optimize,
     $self->arg_object_file($object_file),
   );
+  my @cc = $self->split_like_shell($args{'C++'} ? $cf->{cxx} : $cf->{cc});
   
   $self->do_system(@cc, @flags, $args{source})
     or die "error building $object_file from '$args{source}'";
@@ -130,7 +162,8 @@ sub compile {
 
 sub have_compiler {
   my ($self, $is_cplusplus) = @_;
-  return $self->{have_compiler} if defined $self->{have_compiler};
+  my $have_compiler_flag = $is_cplusplus ? "have_cxx" : "have_cc";
+  return $self->{$have_compiler_flag} if defined $self->{$have_compiler_flag};
 
   my $result;
   my $attempts = 3;
@@ -171,7 +204,7 @@ sub have_compiler {
     last DIR if $result;
   }
 
-  return $self->{have_compiler} = $result;
+  return $self->{$have_compiler_flag} = $result;
 }
 
 sub have_cplusplus {
