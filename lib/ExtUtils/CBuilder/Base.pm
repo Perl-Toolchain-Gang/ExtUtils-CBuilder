@@ -9,6 +9,7 @@ use Text::ParseWords;
 use IO::File;
 use Data::Dumper;$Data::Dumper::Indent=1;
 use IPC::Cmd qw(can_run);
+use File::Temp qw(tempfile);
 
 use vars qw($VERSION);
 $VERSION = '0.2704';
@@ -163,45 +164,35 @@ sub compile {
 sub have_compiler {
   my ($self, $is_cplusplus) = @_;
   my $have_compiler_flag = $is_cplusplus ? "have_cxx" : "have_cc";
+  my $suffix = $is_cplusplus ? ".cc" : ".c";
   return $self->{$have_compiler_flag} if defined $self->{$have_compiler_flag};
 
   my $result;
   my $attempts = 3;
   # tmpdir has issues for some people so fall back to current dir
-  DIR: for my $dir ( File::Spec->tmpdir, '.' ) {
 
-    # don't clobber existing files (rare, but possible)
-    my $rand = int(rand(2**31));
-    my $tmpfile = File::Spec->catfile($dir, "compilet-$rand.c");
-    $tmpfile .= "c" if $is_cplusplus;
-    if ( -e $tmpfile ) {
-      redo DIR if $attempts--;
-      next DIR;
-    }
+  # don't clobber existing files (rare, but possible)
+  my ( $FH, $tmpfile ) = tempfile( "compilet-XXXXX", SUFFIX => $suffix );
+  binmode $FH, ":text";
 
-    {
-      my $FH = IO::File->new("> $tmpfile") or die "Can't create $tmpfile: $!";
-      if ( $is_cplusplus ) {
-        print $FH "class Bogus { public: int boot_compilet() { return 1; } };\n";
-      }
-      else {
-        print $FH "int boot_compilet() { return 1; }\n";
-      }
-    }
+  if ( $is_cplusplus ) {
+    print $FH "class Bogus { public: int boot_compilet() { return 1; } };\n";
+  }
+  else {
+    print $FH "int boot_compilet() { return 1; }\n";
+  }
 
-    my ($obj_file, @lib_files);
-    eval {
-      local $^W = 0;
-      local $self->{quiet} = 1;
-      $obj_file = $self->compile('C++' => $is_cplusplus, source => $tmpfile);
-      @lib_files = $self->link(objects => $obj_file, module_name => 'compilet');
-    };
-    $result = $@ ? 0 : 1;
+  my ($obj_file, @lib_files);
+  eval {
+    local $^W = 0;
+    local $self->{quiet} = 1;
+    $obj_file = $self->compile('C++' => $is_cplusplus, source => $tmpfile);
+    @lib_files = $self->link(objects => $obj_file, module_name => 'compilet');
+  };
+  $result = $@ ? 0 : 1;
 
-    foreach (grep defined, $tmpfile, $obj_file, @lib_files) {
-      1 while unlink;
-    }
-    last DIR if $result;
+  foreach (grep defined, $tmpfile, $obj_file, @lib_files) {
+    1 while unlink;
   }
 
   return $self->{$have_compiler_flag} = $result;
