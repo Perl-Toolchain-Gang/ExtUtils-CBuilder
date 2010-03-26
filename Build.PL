@@ -15,10 +15,12 @@ my $build = $class->new
    auto_configure_requires => 0,
    requires => {
 		'File::Basename' => 0,
-		'File::Spec' => 0,
+		'File::Spec' => 3.13, # fixes tmpdir issues
+		'File::Temp' => 0,
 		'Text::ParseWords' => 0,
 		'Cwd' => 0,
 		'IO::File' => 0,
+		'IPC::Cmd' => 0,
 	       },
    build_requires => {
 		      'Test::More' => 0.47,
