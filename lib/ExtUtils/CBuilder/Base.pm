@@ -14,11 +14,19 @@ use File::Temp qw(tempfile);
 use vars qw($VERSION);
 $VERSION = '0.2704';
 
+# More details about C/C++ compilers:
+# http://developers.sun.com/sunstudio/documentation/product/compiler.jsp
+# http://gcc.gnu.org/
+# http://publib.boulder.ibm.com/infocenter/comphelp/v101v121/index.jsp
+# http://msdn.microsoft.com/en-us/vstudio/default.aspx
+
 my %cc2cxx = (
-    cc => [ 'c++', 'CC', ], # http://developers.sun.com/sunstudio/documentation/product/compiler.jsp
-    gcc => [ 'g++' ], # http://gcc.gnu.org/
-    xlc => [ 'xlC' ], # http://publib.boulder.ibm.com/infocenter/comphelp/v101v121/index.jsp
-    xlc_r => [ 'xlC_r' ], # http://publib.boulder.ibm.com/infocenter/comphelp/v101v121/index.jsp
+    # first line order is important to support wrappers like in pkgsrc
+    cc => [ 'c++', 'CC', 'aCC', ], # Sun Studio, HP ANSI C/C++ Compilers
+    gcc => [ 'g++' ], # GNU Compiler Collection
+    xlc => [ 'xlC' ], # IBM C/C++ Set, xlc without thread-safety
+    xlc_r => [ 'xlC_r' ], # IBM C/C++ Set, xlc with thread-safety
+    cl    => [ 'cl' ], # Microsoft Visual Studio
 );
 
 sub new {
@@ -39,8 +47,16 @@ sub new {
   $self->{config}{ldflags} = $ENV{LDFLAGS} if exists $ENV{LDFLAGS};
 
   unless ( exists $self->{config}{cxx} ) {
-    my $knowncc = basename($self->{config}{cc});
-    foreach my $cxx (@{$cc2cxx{$knowncc}}) {
+    my ($ccpath, $ccbase, $ccsfx ) = fileparse($self->{config}{cc}, qr/\.[^.]*/);
+    foreach my $cxx (@{$cc2cxx{$ccbase}}) {
+      if( can_run( File::Spec->catfile( $ccpath, $cxx, $ccsfx ) ) ) {
+        $self->{config}{cxx} = File::Spec->catfile( $ccpath, $cxx, $ccsfx );
+	last;
+      }
+      if( can_run( File::Spec->catfile( $cxx, $ccsfx ) ) ) {
+        $self->{config}{cxx} = File::Spec->catfile( $cxx, $ccsfx );
+	last;
+      }
       if( can_run( $cxx ) ) {
         $self->{config}{cxx} = $cxx;
 	last;
