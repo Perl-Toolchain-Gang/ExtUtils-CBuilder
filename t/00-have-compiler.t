@@ -16,7 +16,7 @@ BEGIN {
   }
 }
 
-plan tests => 6;
+plan tests => 7;
 
 require_ok "ExtUtils::CBuilder";
 
@@ -43,3 +43,14 @@ $b->{have_compiler} = undef;
 is( $b->have_cplusplus, 1, "have_cpp_compiler: fake present c++" );
 
 # test missing cpp compiler
+
+# test one non-exported subroutine
+{
+    my $type = ExtUtils::CBuilder::os_type();
+    if ($type) {
+        pass( "OS type $type located for $^O" );
+    }
+    else {
+        pass( "OS type not yet listed for $^O" );
+    }
+}
