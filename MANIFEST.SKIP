@@ -39,3 +39,4 @@ doc_check.pl$
 ^devtools
 ^cover_db
 ^MYMETA.yml$
+^pm_to_blib$
