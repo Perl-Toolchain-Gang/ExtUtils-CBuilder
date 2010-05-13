@@ -9,6 +9,7 @@ BEGIN {
     import vmsish;
   }
 }
+use Config;
 use Cwd;
 use File::Temp qw( tempdir );
 use ExtUtils::CBuilder::Base;
@@ -46,7 +47,29 @@ is( $base->{config}->{cc}, $phony,
         ExtUtils::CBuilder::Base::find_perl_interpreter(),
         $path_to_perl,
         "find_perl_interpreter() returned expected absolute path"
-    );;
+    );
+}
+
+{
+    my $path_to_perl = 'foobar';
+    local $^X = $path_to_perl;
+    # %Config is read-only.  We cannot assign to it and we therefore cannot
+    # simulate the condition that would occur were its value something other
+    # than an existing file.
+    if ($Config::Config{perlpath}) {
+        is(
+            ExtUtils::CBuilder::Base::find_perl_interpreter(),
+            $Config::Config{perlpath},
+            "find_perl_interpreter() returned expected file"
+        );
+    }
+    else {
+        is(
+            ExtUtils::CBuilder::Base::find_perl_interpreter(),
+            $path_to_perl,
+            "find_perl_interpreter() returned expected name"
+        );
+    }
 }
 
 {
