@@ -110,9 +110,7 @@ like(
     "Got expected error message when lacking 'source' argument to compile()"
 );
 
-
-my $quiet = $ENV{PERL_CORE} && !$ENV{HARNESS_ACTIVE};
-$base = ExtUtils::CBuilder::Base->new( quiet => $quiet );
+$base = ExtUtils::CBuilder::Base->new( quiet => 1 );
 ok( $base, "ExtUtils::CBuilder::Base->new() returned true value" );
 isa_ok( $base, 'ExtUtils::CBuilder::Base' );
 
@@ -138,11 +136,18 @@ $lib_file = $base->lib_file($object_file);
 ok( $lib_file, "lib_file() returned true value" );
 
 my ($lib, @temps) = $base->link(
-    objects => $object_file,
+    objects     => $object_file,
     module_name => 'compilet',
 );
 $lib =~ tr/"'//d; #"
 is($lib_file, $lib, "Got expected value for $lib");
+
+{
+    local $ENV{PERL_CORE} = '';
+    my $include_dir = $base->perl_inc();
+    ok( $include_dir, "perl_inc() returned true value" );
+    ok( -d $include_dir, "perl_inc() returned directory" );
+}
 
 for ($source_file, $object_file, $lib_file) {
   tr/"'//d; #"
