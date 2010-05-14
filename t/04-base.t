@@ -98,7 +98,58 @@ is( $base->{config}->{cc}, $phony,
     chdir $cwd;
 }
 
-pass("Passed all tests in $0");
+$base = ExtUtils::CBuilder::Base->new();
+ok( $base, "ExtUtils::CBuilder::Base->new() returned true value" );
+isa_ok( $base, 'ExtUtils::CBuilder::Base' );
+eval {
+    $base->compile(foo => 'bar');
+};
+like(
+    $@,
+    qr/Missing 'source' argument to compile/,
+    "Got expected error message when lacking 'source' argument to compile()"
+);
+
+
+my $quiet = $ENV{PERL_CORE} && !$ENV{HARNESS_ACTIVE};
+$base = ExtUtils::CBuilder::Base->new( quiet => $quiet );
+ok( $base, "ExtUtils::CBuilder::Base->new() returned true value" );
+isa_ok( $base, 'ExtUtils::CBuilder::Base' );
+
+my ($source_file, $object_file, $lib_file);
+$source_file = File::Spec->catfile('t', 'compilet.c');
+{
+  local *FH;
+  open FH, "> $source_file" or die "Can't create $source_file: $!";
+  print FH "int boot_compilet(void) { return 1; }\n";
+  close FH;
+}
+ok(-e $source_file, "source file '$source_file' created");
+$object_file = File::Spec->catfile('t', 'my_special_compilet.o' );
+is( $object_file,
+    $base->compile(
+        source      => $source_file,
+        object_file => $object_file,
+    ),
+    "compile() completed, returned object file with specified name"
+);
+
+$lib_file = $base->lib_file($object_file);
+ok( $lib_file, "lib_file() returned true value" );
+
+my ($lib, @temps) = $base->link(
+    objects => $object_file,
+    module_name => 'compilet',
+);
+$lib =~ tr/"'//d; #"
+is($lib_file, $lib, "Got expected value for $lib");
+
+for ($source_file, $object_file, $lib_file) {
+  tr/"'//d; #"
+  1 while unlink;
+}
+
+pass("Completed all tests in $0");
 
 if ($^O eq 'VMS') {
    1 while unlink 'COMPILET.LIS';
