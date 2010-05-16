@@ -7,6 +7,7 @@ use Cwd ();
 use Config;
 use Text::ParseWords;
 use IO::File;
+use Data::Dumper;$Data::Dumper::Indent=1;
 
 use vars qw($VERSION);
 $VERSION = '0.2704';
@@ -91,12 +92,19 @@ sub compile {
   
   $args{object_file} ||= $self->object_file($args{source});
 
-  $args{include_dirs} = [ $args{include_dirs} ]
-    if exists($args{include_dirs}) && ref($args{include_dirs}) ne "ARRAY";
+  my $include_dirs_ref = [];
+  if (exists($args{include_dirs}) && ref($args{include_dirs}) ne "ARRAY") {
+    $include_dirs_ref = [ $args{include_dirs} ];
+  }
+  else {
+    $include_dirs_ref = $args{include_dirs};
+  }
+  
 
-  my @include_dirs = $self->arg_include_dirs
-    (@{$args{include_dirs} || []},
-     $self->perl_inc());
+  my @include_dirs = $self->arg_include_dirs(
+    @{ $include_dirs_ref || [] },
+    $self->perl_inc(),
+  );
   
   my @defines = $self->arg_defines( %{$args{defines} || {}} );
   
@@ -113,11 +121,15 @@ sub compile {
     $self->arg_nolink,
     @ccflags,
     @optimize,
-    $self->arg_object_file($args{object_file}),
+    '-o',
+    $args{object_file},
   );
   
-  $self->do_system(@cc, @flags, $args{source})
+  my @all_args = (@cc, @flags, $args{source});
+#say STDERR Dumper \@all_args;
+  $self->do_system(@all_args)
     or die "error building $args{object_file} from '$args{source}'";
+#    or die "error building $object_file from '$args{source}'";
 
   return $args{object_file};
 }
