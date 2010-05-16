@@ -1,7 +1,7 @@
 #! perl -w
 
 use strict;
-use Test::More qw(no_plan); # tests => 7;
+use Test::More tests => 33;
 BEGIN { 
   if ($^O eq 'VMS') {
     # So we can get the return value of system()
@@ -160,6 +160,18 @@ is( $object_file,
         defines     => { alpha => 'beta', gamma => 'delta' },
     ),
     "'defines' provided: compile() completed, returned object file with specified name"
+);
+
+my %args = ();
+my @defines = $base->arg_defines( %args );
+ok( ! @defines, "Empty hash passed to arg_defines() returns empty list" );
+
+%args = ( alpha => 'beta', gamma => 'delta' );
+my $defines_seen_ref = { map { $_ => 1 } $base->arg_defines( %args ) };
+is_deeply(
+    $defines_seen_ref,
+    { '-Dalpha=beta' => 1, '-Dgamma=delta' => 1 },
+    "Got expected defines",
 );
 
 for ($source_file, $object_file, $lib_file) {
