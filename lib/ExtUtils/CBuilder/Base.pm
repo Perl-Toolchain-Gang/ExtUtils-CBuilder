@@ -90,17 +90,14 @@ sub compile {
   my $cf = $self->{config}; # For convenience
   my @cc = $self->split_like_shell($cf->{cc});
   
-  $args{object_file} ||= $self->object_file($args{source});
+  my $object_file = $args{object_file}
+    ? $args{object_file}
+    : $self->object_file($args{source});
 
-  my $include_dirs_ref = [];
-  if (exists($args{include_dirs}) && ref($args{include_dirs}) ne "ARRAY") {
-    $include_dirs_ref = [ $args{include_dirs} ];
-  }
-  else {
-    $include_dirs_ref = $args{include_dirs};
-  }
-  
-
+  my $include_dirs_ref = 
+    (exists($args{include_dirs}) && ref($args{include_dirs}) ne "ARRAY")
+      ? [ $args{include_dirs} ]
+      : $args{include_dirs};
   my @include_dirs = $self->arg_include_dirs(
     @{ $include_dirs_ref || [] },
     $self->perl_inc(),
@@ -108,7 +105,8 @@ sub compile {
   
   my @defines = $self->arg_defines( %{$args{defines} || {}} );
   
-  my @extra_compiler_flags = $self->split_like_shell($args{extra_compiler_flags});
+  my @extra_compiler_flags =
+    $self->split_like_shell($args{extra_compiler_flags});
   my @cccdlflags = $self->split_like_shell($cf->{cccdlflags});
   my @ccflags = $self->split_like_shell($cf->{ccflags});
   push @ccflags, qw/-x c++/ if $args{'C++'};
@@ -121,17 +119,14 @@ sub compile {
     $self->arg_nolink,
     @ccflags,
     @optimize,
-    '-o',
-    $args{object_file},
+    $self->arg_object_file($object_file),
   );
   
   my @all_args = (@cc, @flags, $args{source});
-#say STDERR Dumper \@all_args;
   $self->do_system(@all_args)
-    or die "error building $args{object_file} from '$args{source}'";
-#    or die "error building $object_file from '$args{source}'";
+    or die "error building $object_file from '$args{source}'";
 
-  return $args{object_file};
+  return $object_file;
 }
 
 sub have_compiler {
