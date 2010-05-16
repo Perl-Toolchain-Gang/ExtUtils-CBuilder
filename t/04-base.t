@@ -16,6 +16,7 @@ use ExtUtils::CBuilder::Base;
 #use Data::Dumper;$Data::Dumper::Indent=1;
 
 my ( $base, $phony, $cwd );
+my ( $source_file, $object_file, $lib_file );
 
 $base = ExtUtils::CBuilder::Base->new();
 ok( $base, "ExtUtils::CBuilder::Base->new() returned true value" );
@@ -114,13 +115,8 @@ $base = ExtUtils::CBuilder::Base->new( quiet => 1 );
 ok( $base, "ExtUtils::CBuilder::Base->new() returned true value" );
 isa_ok( $base, 'ExtUtils::CBuilder::Base' );
 
-my ($source_file, $object_file, $lib_file);
 $source_file = File::Spec->catfile('t', 'compilet.c');
-{
-  open my $FH, '>', $source_file or die "Can't create $source_file: $!";
-  print $FH "int boot_compilet(void) { return 1; }\n";
-  close $FH;
-}
+create_c_source_file($source_file);
 ok(-e $source_file, "source file '$source_file' created");
 $object_file = File::Spec->catfile('t', 'my_special_compilet.o' );
 is( $object_file,
@@ -148,6 +144,24 @@ is($lib_file, $lib, "Got expected value for $lib");
     ok( -d $include_dir, "perl_inc() returned directory" );
 }
 
+#
+$base = ExtUtils::CBuilder::Base->new( quiet => 1 );
+ok( $base, "ExtUtils::CBuilder::Base->new() returned true value" );
+isa_ok( $base, 'ExtUtils::CBuilder::Base' );
+
+$source_file = File::Spec->catfile('t', 'compilet.c');
+create_c_source_file($source_file);
+ok(-e $source_file, "source file '$source_file' created");
+$object_file = File::Spec->catfile('t', 'my_special_compilet.o' );
+is( $object_file,
+    $base->compile(
+        source      => $source_file,
+        object_file => $object_file,
+        defines     => { alpha => 'beta', gamma => 'delta' },
+    ),
+    "'defines' provided: compile() completed, returned object file with specified name"
+);
+
 for ($source_file, $object_file, $lib_file) {
   tr/"'//d; #"
   1 while unlink;
@@ -160,3 +174,9 @@ if ($^O eq 'VMS') {
    1 while unlink 'COMPILET.OPT';
 }
 
+sub create_c_source_file {
+    my $source_file = shift;
+    open my $FH, '>', $source_file or die "Can't create $source_file: $!";
+    print $FH "int boot_compilet(void) { return 1; }\n";
+    close $FH;
+}
