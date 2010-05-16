@@ -87,7 +87,8 @@ sub compile {
   die "Missing 'source' argument to compile()" unless defined $args{source};
   
   my $cf = $self->{config}; # For convenience
-
+  my @cc = $self->split_like_shell($cf->{cc});
+  
   $args{object_file} ||= $self->object_file($args{source});
 
   $args{include_dirs} = [ $args{include_dirs} ]
@@ -104,13 +105,16 @@ sub compile {
   my @ccflags = $self->split_like_shell($cf->{ccflags});
   push @ccflags, qw/-x c++/ if $args{'C++'};
   my @optimize = $self->split_like_shell($cf->{optimize});
-  my @flags = (@include_dirs, @defines, @cccdlflags, @extra_compiler_flags,
-	       $self->arg_nolink,
-	       @ccflags, @optimize,
-	       $self->arg_object_file($args{object_file}),
-	      );
-  
-  my @cc = $self->split_like_shell($cf->{cc});
+  my @flags = (
+    @include_dirs,
+    @defines,
+    @cccdlflags,
+    @extra_compiler_flags,
+    $self->arg_nolink,
+    @ccflags,
+    @optimize,
+    $self->arg_object_file($args{object_file}),
+  );
   
   $self->do_system(@cc, @flags, $args{source})
     or die "error building $args{object_file} from '$args{source}'";
@@ -199,9 +203,9 @@ sub prelink {
     DL_FUNCS => $args{dl_funcs}     || {},
     FUNCLIST => $args{dl_func_list} || [],
     IMPORTS  => $args{dl_imports}   || {},
-    NAME     => $args{dl_name},		# Name of the Perl module
-    DLBASE   => $args{dl_base},		# Basename of DLL file
-    FILE     => $args{dl_file},		# Dir + Basename of symlist file
+    NAME     => $args{dl_name},    # Name of the Perl module
+    DLBASE   => $args{dl_base},    # Basename of DLL file
+    FILE     => $args{dl_file},    # Dir + Basename of symlist file
     VERSION  => (defined $args{dl_version} ? $args{dl_version} : '0.0'),
   );
   
@@ -230,14 +234,19 @@ sub _do_link {
   
   my @temp_files;
   @temp_files =
-    $self->prelink(%args,
-		   dl_name => $args{module_name}) if $args{lddl} && $self->need_prelink;
+    $self->prelink(%args, dl_name => $args{module_name})
+      if $args{lddl} && $self->need_prelink;
   
-  my @linker_flags = ($self->split_like_shell($args{extra_linker_flags}),
-		      $self->extra_link_args_after_prelink(%args, dl_name => $args{module_name},
-							   prelink_res => \@temp_files));
+  my @linker_flags = (
+    $self->split_like_shell($args{extra_linker_flags}),
+    $self->extra_link_args_after_prelink(
+       %args, dl_name => $args{module_name}, prelink_res => \@temp_files
+    )
+  );
 
-  my @output = $args{lddl} ? $self->arg_share_object_file($out) : $self->arg_exec_file($out);
+  my @output = $args{lddl}
+    ? $self->arg_share_object_file($out)
+    : $self->arg_exec_file($out);
   my @shrp = $self->split_like_shell($cf->{shrpenv});
   my @ld = $self->split_like_shell($cf->{ld});
   
@@ -278,12 +287,12 @@ sub perl_src {
   # Try up to 5 levels upwards
   for (0..10) {
     if (
-	-f File::Spec->catfile($dir,"config_h.SH")
-	&&
-	-f File::Spec->catfile($dir,"perl.h")
-	&&
-	-f File::Spec->catfile($dir,"lib","Exporter.pm")
-       ) {
+      -f File::Spec->catfile($dir,"config_h.SH")
+      &&
+      -f File::Spec->catfile($dir,"perl.h")
+      &&
+      -f File::Spec->catfile($dir,"lib","Exporter.pm")
+    ) {
       return Cwd::realpath( $dir );
     }
 
@@ -308,3 +317,5 @@ sub DESTROY {
 }
 
 1;
+
+# vim: ts=2 sw=2 et:
