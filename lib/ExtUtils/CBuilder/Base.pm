@@ -122,8 +122,7 @@ sub compile {
     $self->arg_object_file($object_file),
   );
   
-  my @all_args = (@cc, @flags, $args{source});
-  $self->do_system(@all_args)
+  $self->do_system(@cc, @flags, $args{source})
     or die "error building $object_file from '$args{source}'";
 
   return $object_file;
