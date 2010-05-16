@@ -117,10 +117,9 @@ isa_ok( $base, 'ExtUtils::CBuilder::Base' );
 my ($source_file, $object_file, $lib_file);
 $source_file = File::Spec->catfile('t', 'compilet.c');
 {
-  local *FH;
-  open FH, "> $source_file" or die "Can't create $source_file: $!";
-  print FH "int boot_compilet(void) { return 1; }\n";
-  close FH;
+  open my $FH, '>', $source_file or die "Can't create $source_file: $!";
+  print $FH "int boot_compilet(void) { return 1; }\n";
+  close $FH;
 }
 ok(-e $source_file, "source file '$source_file' created");
 $object_file = File::Spec->catfile('t', 'my_special_compilet.o' );
