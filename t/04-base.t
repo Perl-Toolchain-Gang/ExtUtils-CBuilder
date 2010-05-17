@@ -1,7 +1,7 @@
 #! perl -w
 
 use strict;
-use Test::More tests => 33;
+use Test::More tests => 39;
 BEGIN { 
   if ($^O eq 'VMS') {
     # So we can get the return value of system()
@@ -118,13 +118,22 @@ isa_ok( $base, 'ExtUtils::CBuilder::Base' );
 $source_file = File::Spec->catfile('t', 'compilet.c');
 create_c_source_file($source_file);
 ok(-e $source_file, "source file '$source_file' created");
+
+# object filename automatically assigned
+my $obj_ext = $base->{config}{obj_ext};
+is( $base->object_file($source_file),
+    File::Spec->catfile('t', "compilet$obj_ext"),
+    "object_file(): got expected automatically assigned name for object file"
+);
+
+# object filename explicitly assigned
 $object_file = File::Spec->catfile('t', 'my_special_compilet.o' );
 is( $object_file,
     $base->compile(
         source      => $source_file,
         object_file => $object_file,
     ),
-    "compile() completed, returned object file with specified name"
+    "compile(): returned object file with specified name"
 );
 
 $lib_file = $base->lib_file($object_file);
@@ -135,7 +144,7 @@ my ($lib, @temps) = $base->link(
     module_name => 'compilet',
 );
 $lib =~ tr/"'//d; #"
-is($lib_file, $lib, "Got expected value for $lib");
+is($lib_file, $lib, "lib_file(): got expected value for $lib");
 
 {
     local $ENV{PERL_CORE} = '';
@@ -159,7 +168,7 @@ is( $object_file,
         object_file => $object_file,
         defines     => { alpha => 'beta', gamma => 'delta' },
     ),
-    "'defines' provided: compile() completed, returned object file with specified name"
+    "compile() completed when 'defines' provided; returned object file with specified name"
 );
 
 my %args = ();
@@ -171,7 +180,44 @@ my $defines_seen_ref = { map { $_ => 1 } $base->arg_defines( %args ) };
 is_deeply(
     $defines_seen_ref,
     { '-Dalpha=beta' => 1, '-Dgamma=delta' => 1 },
-    "Got expected defines",
+    "arg_defines(): got expected defines",
+);
+
+my $include_dirs_seen_ref =
+    { map {$_ => 1} $base->arg_include_dirs( qw| alpha beta gamma | ) };
+is_deeply(
+    $include_dirs_seen_ref,
+    { '-Ialpha' => 1, '-Ibeta' => 1, '-Igamma' => 1 },
+    "arg_include_dirs(): got expected include_dirs",
+);
+
+is( '-c', $base->arg_nolink(), "arg_nolink(): got expected value" );
+
+my $seen_ref =
+    { map {$_ => 1} $base->arg_object_file('alpha') };
+is_deeply(
+    $seen_ref,
+    { '-o'  => 1, 'alpha' => 1 },
+    "arg_object_file(): got expected option flag and value",
+);
+
+$seen_ref = { map {$_ => 1} $base->arg_share_object_file('alpha') };
+my %exp = map {$_ => 1} $base->split_like_shell($base->{config}{lddlflags});
+$exp{'-o'} = 1;
+$exp{'alpha'} = 1; 
+
+is_deeply(
+    $seen_ref,
+    \%exp,
+    "arg_share_object_file(): got expected option flag and value",
+);
+
+$seen_ref =
+    { map {$_ => 1} $base->arg_exec_file('alpha') };
+is_deeply(
+    $seen_ref,
+    { '-o'  => 1, 'alpha' => 1 },
+    "arg_exec_file(): got expected option flag and value",
 );
 
 for ($source_file, $object_file, $lib_file) {
