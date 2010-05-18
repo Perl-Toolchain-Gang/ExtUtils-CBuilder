@@ -1,7 +1,7 @@
 #! perl -w
 
 use strict;
-use Test::More tests => 50;
+use Test::More tests => 51;
 BEGIN { 
   if ($^O eq 'VMS') {
     # So we can get the return value of system()
@@ -283,7 +283,8 @@ is_deeply( \%split_seen, \%exp,
     my $exporter = File::Spec->catfile( $libsubdir, 'Exporter.pm' );
     touch_file($exporter);
     $rv = $base->perl_src();
-    ok( -d $rv, "perl_src(): identified directory" );
+    ok( -d $rv, "perl_src(): returned a directory" );
+    is( $rv, Cwd::realpath($subdir), "perl_src(): identified directory" );
     is( $capture, q{}, "perl_src(): no warning, as expected" );
 
     chdir $cwd
