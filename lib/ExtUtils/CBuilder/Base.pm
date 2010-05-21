@@ -200,23 +200,32 @@ sub extra_link_args_after_prelink { return }
 
 sub prelink {
   my ($self, %args) = @_;
-  
-  ($args{dl_file} = $args{dl_name}) =~ s/.*::// unless $args{dl_file};
-  
+
+  my ($dl_file_out, $mksymlists_args) = _prepare_mksymlists_args(\%args);
+
   require ExtUtils::Mksymlists;
-  ExtUtils::Mksymlists::Mksymlists( # dl. abbrev for dynamic library
-    DL_VARS  => $args{dl_vars}      || [],
-    DL_FUNCS => $args{dl_funcs}     || {},
-    FUNCLIST => $args{dl_func_list} || [],
-    IMPORTS  => $args{dl_imports}   || {},
-    NAME     => $args{dl_name},    # Name of the Perl module
-    DLBASE   => $args{dl_base},    # Basename of DLL file
-    FILE     => $args{dl_file},    # Dir + Basename of symlist file
-    VERSION  => (defined $args{dl_version} ? $args{dl_version} : '0.0'),
-  );
-  
+  # dl. abbrev for dynamic library
+  ExtUtils::Mksymlists::Mksymlists( %{ $mksymlists_args } );
+
   # Mksymlists will create one of these files
-  return grep -e, map "$args{dl_file}.$_", qw(ext def opt);
+  return grep -e, map "$dl_file_out.$_", qw(ext def opt);
+}
+
+sub _prepare_mksymlists_args {
+  my $args = shift;
+  ($args->{dl_file} = $args->{dl_name}) =~ s/.*::// unless $args->{dl_file};
+  
+  my %mksymlists_args = (
+    DL_VARS  => $args->{dl_vars}      || [],
+    DL_FUNCS => $args->{dl_funcs}     || {},
+    FUNCLIST => $args->{dl_func_list} || [],
+    IMPORTS  => $args->{dl_imports}   || {},
+    NAME     => $args->{dl_name},    # Name of the Perl module
+    DLBASE   => $args->{dl_base},    # Basename of DLL file
+    FILE     => $args->{dl_file},    # Dir + Basename of symlist file
+    VERSION  => (defined $args->{dl_version} ? $args->{dl_version} : '0.0'),
+  );
+  return ($args->{dl_file}, \%mksymlists_args);
 }
 
 sub link {

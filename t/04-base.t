@@ -1,7 +1,7 @@
 #! perl -w
 
 use strict;
-use Test::More tests => 51;
+use Test::More tests => 55;
 BEGIN { 
   if ($^O eq 'VMS') {
     # So we can get the return value of system()
@@ -14,7 +14,6 @@ use Cwd;
 use File::Path qw( mkpath );
 use File::Temp qw( tempdir );
 use ExtUtils::CBuilder::Base;
-#use Data::Dumper;$Data::Dumper::Indent=1;
 
 my ( $base, $phony, $cwd );
 my ( $source_file, $object_file, $lib_file );
@@ -290,6 +289,63 @@ is_deeply( \%split_seen, \%exp,
     chdir $cwd
         or die "Unable to change from temporary directory after testing";
 }
+
+my ($dl_file_out, $mksymlists_args);
+my $dlf = 'Kappa';
+%args = (
+    dl_vars         => [ qw| alpha beta gamma | ],
+    dl_funcs        => {
+        'Homer::Iliad'      => [ qw(trojans greeks) ],
+        'Homer::Odyssey'    => [ qw(travellers family suitors) ],
+    },
+    dl_func_list    => [ qw| delta epsilon | ],
+    dl_imports      => { zeta => 'eta', theta => 'iota' },
+    dl_name         => 'Tk::Canvas',
+    dl_base         => 'Tk::Canvas.ext',
+    dl_file         => $dlf,
+    dl_version      => '7.7',
+);
+($dl_file_out, $mksymlists_args) =
+    ExtUtils::CBuilder::Base::_prepare_mksymlists_args(\%args);
+is( $dl_file_out, $dlf, "_prepare_mksymlists_args(): Got expected name for dl_file" );
+is_deeply( $mksymlists_args,
+    {
+        DL_VARS         => [ qw| alpha beta gamma | ],
+        DL_FUNCS        => {
+            'Homer::Iliad'      => [ qw(trojans greeks) ],
+            'Homer::Odyssey'    => [ qw(travellers family suitors) ],
+        },
+        FUNCLIST        => [ qw| delta epsilon | ],
+        IMPORTS         => { zeta => 'eta', theta => 'iota' },
+        NAME            => 'Tk::Canvas',
+        DLBASE          => 'Tk::Canvas.ext',
+        FILE            => $dlf,
+        VERSION         => '7.7',
+    },
+    "_prepare_mksymlists_args(): got expected arguments for Mksymlists",
+);
+
+$dlf = 'Canvas';
+%args = (
+    dl_name         => 'Tk::Canvas',
+    dl_base         => 'Tk::Canvas.ext',
+);
+($dl_file_out, $mksymlists_args) =
+    ExtUtils::CBuilder::Base::_prepare_mksymlists_args(\%args);
+is( $dl_file_out, $dlf, "_prepare_mksymlists_args(): got expected name for dl_file" );
+is_deeply( $mksymlists_args,
+    {
+        DL_VARS         => [],
+        DL_FUNCS        => {},
+        FUNCLIST        => [],
+        IMPORTS         => {},
+        NAME            => 'Tk::Canvas',
+        DLBASE          => 'Tk::Canvas.ext',
+        FILE            => $dlf,
+        VERSION         => '0.0',
+    },
+    "_prepare_mksymlists_args(): got expected arguments for Mksymlists",
+);
 
 #####
 
