@@ -1,7 +1,7 @@
 #! perl -w
 
 use strict;
-use Test::More tests => 55;
+use Test::More tests => 58;
 BEGIN { 
   if ($^O eq 'VMS') {
     # So we can get the return value of system()
@@ -139,7 +139,30 @@ is( $object_file,
 $lib_file = $base->lib_file($object_file);
 ok( $lib_file, "lib_file() returned true value" );
 
-my ($lib, @temps) = $base->link(
+my ($lib, @temps);
+($lib, @temps) = $base->link(
+    objects     => $object_file,
+    module_name => 'compilet',
+);
+$lib =~ tr/"'//d; #"
+is($lib_file, $lib, "lib_file(): got expected value for $lib");
+
+($lib, @temps) = $base->link(
+    objects     => [ $object_file ],
+    module_name => 'compilet',
+);
+$lib =~ tr/"'//d; #"
+is($lib_file, $lib, "lib_file(): got expected value for $lib");
+
+($lib, @temps) = $base->link(
+    lib_file    => $lib_file,
+    objects     => [ $object_file ],
+    module_name => 'compilet',
+);
+$lib =~ tr/"'//d; #"
+is($lib_file, $lib, "lib_file(): got expected value for $lib");
+
+$lib = $base->link(
     objects     => $object_file,
     module_name => 'compilet',
 );
