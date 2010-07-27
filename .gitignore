@@ -4,6 +4,7 @@
 *.tar.gz
 *.rej
 *.orig
+*.swp
 *~
 /Build
 /Build.bat
