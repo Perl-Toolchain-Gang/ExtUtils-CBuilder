@@ -1,6 +1,6 @@
 Revision history for Perl extension ExtUtils::CBuilder.
 
-0.27_04 -
+0.27_04 - Mon Jul 26 22:41:43 EDT 2010
 
   Added:
   - handle c compiler and c++ compiler separately
@@ -11,6 +11,9 @@ Revision history for Perl extension ExtUtils::CBuilder.
     get unique file name for checking for compiler
     [Jens Rehsack]
 
+  - Code base modernization and substantial code coverage improvments
+    [Jim Keenan]
+   
 0.2703 - Tue Mar 16 17:10:55 EDT 2010
 
  Bugs fixed:
