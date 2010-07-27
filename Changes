@@ -1,6 +1,6 @@
 Revision history for Perl extension ExtUtils::CBuilder.
 
-0.2704 - 
+0.27_04 -
 
   Added:
   - handle c compiler and c++ compiler separately

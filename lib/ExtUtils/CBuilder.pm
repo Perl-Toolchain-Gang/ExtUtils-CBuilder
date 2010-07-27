@@ -5,7 +5,7 @@ use File::Path ();
 use File::Basename ();
 
 use vars qw($VERSION @ISA);
-$VERSION = '0.2704';
+$VERSION = '0.27_04';
 $VERSION = eval $VERSION;
 
 # Okay, this is the brute-force method of finding out what kind of
