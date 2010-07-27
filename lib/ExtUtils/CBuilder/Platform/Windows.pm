@@ -101,7 +101,7 @@ sub compile {
     builddir    => $srcdir,
     basename    => $basename,
     source      => $args{source},
-    output      => File::Spec->catfile($srcdir, $basename) . $cf->{obj_ext},
+    output      => $args{object_file} || File::Spec->catfile($srcdir, $basename) . $cf->{obj_ext},
     cc          => $cf->{cc},
     cflags      => [
                      $self->split_like_shell($cf->{ccflags}),
