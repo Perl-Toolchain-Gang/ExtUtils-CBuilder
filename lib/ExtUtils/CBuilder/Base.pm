@@ -139,7 +139,6 @@ sub compile {
   die "Missing 'source' argument to compile()" unless defined $args{source};
   
   my $cf = $self->{config}; # For convenience
-  my @cc = $self->split_like_shell($cf->{cc});
   
   my $object_file = $args{object_file}
     ? $args{object_file}
