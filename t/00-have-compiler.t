@@ -37,6 +37,7 @@ is( $b->have_cplusplus, 0, "have_cplusplus: fake missing c++" );
 # test found compiler
 $b->{config}{cc} = $run_perl;
 $b->{config}{ld} = $run_perl;
+$b->{config}{cxx} = $run_perl;
 $b->{have_cc} = undef;
 is( $b->have_compiler, 1, "have_compiler: fake present cc" );
 $b->{have_cxx} = undef;

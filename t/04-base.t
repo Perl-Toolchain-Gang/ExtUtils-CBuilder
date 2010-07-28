@@ -15,6 +15,9 @@ use File::Path qw( mkpath );
 use File::Temp qw( tempdir );
 use ExtUtils::CBuilder::Base;
 
+# XXX protect from user CC as we mock everything here
+local $ENV{CC};
+
 my ( $base, $phony, $cwd );
 my ( $source_file, $object_file, $lib_file );
 
@@ -22,14 +25,16 @@ $base = ExtUtils::CBuilder::Base->new();
 ok( $base, "ExtUtils::CBuilder::Base->new() returned true value" );
 isa_ok( $base, 'ExtUtils::CBuilder::Base' );
 
-$phony = 'foobar';
-$base = ExtUtils::CBuilder::Base->new(
-    config  => { cc => $phony },
-);
-ok( $base, "ExtUtils::CBuilder::Base->new() returned true value" );
-isa_ok( $base, 'ExtUtils::CBuilder::Base' );
-is( $base->{config}->{cc}, $phony,
-    "Got expected value when 'config' argument passed to new()" );
+{
+  $phony = 'foobar';
+  $base = ExtUtils::CBuilder::Base->new(
+      config  => { cc => $phony },
+  );
+  ok( $base, "ExtUtils::CBuilder::Base->new() returned true value" );
+  isa_ok( $base, 'ExtUtils::CBuilder::Base' );
+  is( $base->{config}->{cc}, $phony,
+      "Got expected value when 'config' argument passed to new()" );
+}
 
 {
     $phony = 'barbaz';
@@ -99,7 +104,13 @@ is( $base->{config}->{cc}, $phony,
     chdir $cwd;
 }
 
-$base = ExtUtils::CBuilder::Base->new();
+# fake compiler is perl and will always succeed
+$base = ExtUtils::CBuilder::Base->new(
+    config  => {
+        cc => File::Spec->rel2abs($^X) . " -e1 --",
+        ld => File::Spec->rel2abs($^X) . " -e1 --",
+    }
+);
 ok( $base, "ExtUtils::CBuilder::Base->new() returned true value" );
 isa_ok( $base, 'ExtUtils::CBuilder::Base' );
 eval {
