@@ -22,7 +22,7 @@ $VERSION = '0.27_04';
 
 my %cc2cxx = (
     # first line order is important to support wrappers like in pkgsrc
-    cc => [ 'c++', 'CC', 'aCC', ], # Sun Studio, HP ANSI C/C++ Compilers
+    cc => [ 'c++', 'CC', 'aCC', 'cxx', ], # Sun Studio, HP ANSI C/C++ Compilers
     gcc => [ 'g++' ], # GNU Compiler Collection
     xlc => [ 'xlC' ], # IBM C/C++ Set, xlc without thread-safety
     xlc_r => [ 'xlC_r' ], # IBM C/C++ Set, xlc with thread-safety
@@ -77,7 +77,7 @@ sub find_perl_interpreter {
   my $perl;
   File::Spec->file_name_is_absolute($perl = $^X)
     or -f ($perl = $Config::Config{perlpath})
-    or ($perl = $^X);
+    or ($perl = $^X); # XXX how about using IPC::Cmd::can_run here?
   return $perl;
 }
 
