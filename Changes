@@ -1,5 +1,11 @@
 Revision history for Perl extension ExtUtils::CBuilder.
 
+0.27_05 - Wed Jul 28 15:29:59 EDT 2010
+
+  Fixed:
+
+  - Tests no longer fail if user has set the CC environment variable
+
 0.27_04 - Mon Jul 26 22:41:43 EDT 2010
 
   Added:
@@ -13,7 +19,7 @@ Revision history for Perl extension ExtUtils::CBuilder.
 
   - Code base modernization and substantial code coverage improvments
     [Jim Keenan]
-   
+
 0.2703 - Tue Mar 16 17:10:55 EDT 2010
 
  Bugs fixed:
@@ -253,7 +259,7 @@ Revision history for Perl extension ExtUtils::CBuilder.
 
  - Various parts of the code were looking for the CORE/ directory in
    $Config{archlib}, $Config{installarchlib}, and $Config{archlibexp}.
-   Only the latter is correct, so we use that everywhere now. 
+   Only the latter is correct, so we use that everywhere now.
    [Curt Tilmes]
 
  - For Unix-ish platforms, link_executable() will now prefer
