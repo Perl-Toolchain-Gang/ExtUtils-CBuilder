@@ -12,6 +12,8 @@ CVS
 ^MANIFEST\.SKIP$
 \.bak$
 \.rej$
+\.orig$
+\.patch$
 ^patch
 ^Module-
 ^t/_
@@ -40,3 +42,4 @@ doc_check.pl$
 ^cover_db
 ^MYMETA.yml$
 ^pm_to_blib$
+
