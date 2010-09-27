@@ -2,20 +2,20 @@
 use ExtUtils::MakeMaker;
 WriteMakefile
 (
-          'NAME' => 'ExtUtils::CBuilder',
-          'VERSION_FROM' => 'lib/ExtUtils/CBuilder.pm',
-          'PREREQ_PM' => {
-                           'Cwd' => 0,
-                           'File::Basename' => 0,
-                           'File::Spec' => '3.13',
-                           'File::Temp' => 0,
-                           'IO::File' => 0,
-                           'IPC::Cmd' => 0,
-                           'Test::More' => '0.47',
-                           'Text::ParseWords' => 0
-                         },
-          'INSTALLDIRS' => ($] >= 5.009003 ? 'perl' : 'site'),
-          'EXE_FILES' => [],
-          'PL_FILES' => {}
-        )
+  'NAME' => 'ExtUtils::CBuilder',
+  'VERSION_FROM' => 'lib/ExtUtils/CBuilder.pm',
+  'PREREQ_PM' => {
+                   'Cwd' => 0,
+                   'File::Basename' => 0,
+                   'File::Spec' => '3.13',
+                   'File::Temp' => 0,
+                   'IO::File' => 0,
+                   'IPC::Cmd' => 0,
+                   'Test::More' => '0.47',
+                   'Text::ParseWords' => 0
+                 },
+  'INSTALLDIRS' => ($] >= 5.009003 ? 'perl' : 'site'),
+  'EXE_FILES' => [],
+  'PL_FILES' => {}
+)
 ;
