@@ -327,6 +327,11 @@ sub split_like_shell {
   $string =~ s/^\s+|\s+$//g;
   return () unless length($string);
   
+  # Text::ParseWords replaces all 'escaped' characters with themselves, which completely
+  # breaks paths under windows. As such, we forcibly replace backwards slashes with forward
+  # slashes on windows.
+  $string =~ s@\\@/@g if $^O eq 'MSWin32';
+  
   return Text::ParseWords::shellwords($string);
 }
 
