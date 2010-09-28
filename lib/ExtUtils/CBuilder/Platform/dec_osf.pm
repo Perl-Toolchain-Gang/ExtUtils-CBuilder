@@ -6,7 +6,7 @@ use File::Spec;
 
 use vars qw($VERSION @ISA);
 @ISA = qw(ExtUtils::CBuilder::Platform::Unix);
-$VERSION = '0.27_06';
+$VERSION = '0.27_07';
 
 sub link_executable {
   my $self = shift;
