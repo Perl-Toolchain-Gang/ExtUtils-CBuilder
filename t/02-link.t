@@ -85,11 +85,13 @@ sub my_system {
   my $cmd = shift;
   my $ec;
   if ($^O eq 'VMS') {
-    # Preserve non-posixified status and don't bit shift the result.
-    use vmsish 'status';
+    # Preserve non-posixified status and don't bit shift the result
+    # because we're running under "use vmsish";
     $ec = system("mcr $cmd");
     return $ec;
   }
-  $ec = system($cmd);
-  return $ec == -1 ? -1 : $ec >> 8;
+  else {
+    $ec = system($cmd);
+    return $ec == -1 ? -1 : $ec >> 8;
+  }
 }
