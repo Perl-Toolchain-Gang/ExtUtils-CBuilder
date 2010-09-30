@@ -4,7 +4,7 @@ use strict;
 use ExtUtils::CBuilder::Base;
 
 use vars qw($VERSION @ISA);
-$VERSION = '0.27_07';
+$VERSION = '0.27_08';
 @ISA = qw(ExtUtils::CBuilder::Base);
 
 sub link_executable {
