@@ -62,7 +62,7 @@ isa_ok( $base, 'ExtUtils::CBuilder::Base' );
     # %Config is read-only.  We cannot assign to it and we therefore cannot
     # simulate the condition that would occur were its value something other
     # than an existing file.
-    if ($Config::Config{perlpath}) {
+    if ( !$ENV{PERL_CORE} and $Config::Config{perlpath}) {
         is(
             ExtUtils::CBuilder::Base::find_perl_interpreter(),
             $Config::Config{perlpath},
@@ -182,7 +182,7 @@ $lib =~ tr/"'//d; #"
 is($lib_file, $lib, "lib_file(): got expected value for $lib");
 
 {
-    local $ENV{PERL_CORE} = '';
+    local $ENV{PERL_CORE} = '' unless $ENV{PERL_CORE};
     my $include_dir = $base->perl_inc();
     ok( $include_dir, "perl_inc() returned true value" );
     ok( -d $include_dir, "perl_inc() returned directory" );
