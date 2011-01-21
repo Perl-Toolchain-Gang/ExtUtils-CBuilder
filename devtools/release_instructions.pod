@@ -66,5 +66,8 @@ correct version, of course).
 
   $ git tag -m "release XX.YY" release-XX.YY
 
+Then update the F<Porting/Maintainers.pl> file in the Perl 5 source with
+the new tarball number.
+
 =cut
 
