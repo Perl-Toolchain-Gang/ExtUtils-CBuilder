@@ -18,6 +18,8 @@ from the top level of the EU::CB repo:
 
   $ perl devtools/bleadcheck.pl ~/git/perl
 
+If the version number has changed, update it in F<dist.ini>.
+
 =head2 Testing and committing.
 
 You can run tests with C<dzil test> and release tests with C<dzil xtest>.
