@@ -1,0 +1,10 @@
+ExtUtils::CBuilder is now maintained as part of the Perl 5 source.  This
+repository exists to coordinate dual-life CPAN releases only.
+
+Please direct any contributions to the Perl 5 Porters team.
+See http://dev.perl.org/perl5/ for more details.
+
+Any bug reports for ExtUtils::CBuilder should be submitted via the
+'perlbug' tool distributed with Perl 5.  Patches should be submitted
+upstream to Perl 5.
+

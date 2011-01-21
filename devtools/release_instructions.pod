@@ -2,61 +2,65 @@
 
 =head2 Prerequisites
 
-Recent ExtUtils::CBuilder releases have been packaged using the CPDK tool
-by Eric Wilhelm.  This distribution is not yet on CPAN, but can be
-installed from its repository:
+ExtUtils::CBuilder is now managed using Dist::Zilla.  You should install
+Dist::Zilla from CPAN and then run C<dzil authordeps> to get a list of
+plugins to install.  If you have F<cpanm> you can install any that you
+need with:
 
-  $ svn co http://svn.scratchcomputing.com/CPDK/trunk/ CPDK
-  $ cd CPDK
-  $ cpan .
+  $ dzil authordeps | cpanm
+
+=head2 Updating from bleadperl
+
+Any changes in the perl blead repository need to be synchronized to
+the EU::CB repostory.  You can generate a diff using the F<bleadcheck.pl>
+tool.  Assuming your bleadperl repository is F<~/git/perl>, run this command
+from the top level of the EU::CB repo:
+
+  $ perl devtools/bleadcheck.pl ~/git/perl
+
+=head2 Testing and committing.
+
+You can run tests with C<dzil test> and release tests with C<dzil xtest>.
+If all tests pass, check in the changes to the repository.  Be sure to
+add any new files.
+
+  $ dzil test
+  $ dzil xtest
+  $ git status
+  $ git add .
+
+Confirm that you are in sync:
+
+  $ perl devtools/bleadcheck.pl ~/git/perl
+
+Take note of the commit ID and use it in the commit message
+
+  $ git ci -m "Updating from bleadperl commit 435aa301"
+
+If tests fail, you *must* submit changes upstream in the bleadperl repository
+and then resynchronize from blead.
 
 =head2 Packaging and shipping
 
-Update ExtUtils::CBuilder and make sure there are no local changes or conflicts.
+Update the Changes file with a summary of changes from blead and add a
+timestamp for release.
 
-  $ svn up
+  $ $EDITOR Changes
 
-  $ svn st
+Check what the final distribution will look like:
 
-See what the last tag was:
+  $ dzil build
 
-  $ svn_taglist | tail
-  ...
-  0.31_02
+If everything looks good, ship it!
 
-Pull the logs since that tag and update the Changes file if necessary
-
-  $ svn_logsincetag 0.31_02 | less
-  ...
-
-  $ vim Changes
-
-If everything is good, just datestamp the version section at the top of
-Changes (e.g. use "r! date" then "kJ" in vim.)
-
-  $ svn ci -m "Changes - prep for release"
-
-Then update the metafiles and check in any changes -- this should only
-be needed if something changes the Makefile.PL
-
-  $ perl Build.PL
-  $ Build distmeta
-  $ svn st
-  $ svn ci
-
-And we should now be ready for automated shipping:
-
-  $ publish-module
-
-This produces a tarball, which must be manually uploaded to PAUSE
+  $ dzil release
 
 =head2 After shipping
 
-Now the release is out and tagged.  Start a new version number
+If the release uploaded, tag the release in git (replace XX.YY with the
+correct version, of course).
 
-  $ ./devtools/bump_version.pl
-
-  $ svn ci -m "Changes, lib/***.pm - bump version"
+  $ git tag -m "release XX.YY" release-XX.YY
 
 =cut
 
