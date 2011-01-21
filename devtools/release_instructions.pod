@@ -35,7 +35,7 @@ Confirm that you are in sync:
 
 Take note of the commit ID and use it in the commit message
 
-  $ git ci -m "Updating from bleadperl commit 435aa301"
+  $ git commit -m "Updating from bleadperl commit 435aa301"
 
 If tests fail, you *must* submit changes upstream in the bleadperl repository
 and then resynchronize from blead.
@@ -43,9 +43,11 @@ and then resynchronize from blead.
 =head2 Packaging and shipping
 
 Update the Changes file with a summary of changes from blead and add a
-timestamp for release.
+timestamp for release, then commit it.
 
   $ $EDITOR Changes
+  $ git add Changes
+  $ git commit -m "Updated Changes"
 
 Check what the final distribution will look like:
 
