@@ -12,7 +12,7 @@ use IPC::Cmd qw(can_run);
 use File::Temp qw(tempfile);
 
 use vars qw($VERSION);
-$VERSION = '0.2802';
+$VERSION = '0.280201';
 
 # More details about C/C++ compilers:
 # http://developers.sun.com/sunstudio/documentation/product/compiler.jsp
@@ -198,6 +198,7 @@ sub have_compiler {
   else {
     print $FH "int boot_compilet() { return 1; }\n";
   }
+  close $FH;
 
   my ($obj_file, @lib_files);
   eval {

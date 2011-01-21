@@ -1,19 +1,17 @@
 #! perl -w
 
 use strict;
-use Test::More tests => 58;
-BEGIN { 
-  if ($^O eq 'VMS') {
-    # So we can get the return value of system()
-    require vmsish;
-    import vmsish;
-  }
-}
+use Test::More tests => 50;
 use Config;
 use Cwd;
 use File::Path qw( mkpath );
 use File::Temp qw( tempdir );
 use ExtUtils::CBuilder::Base;
+
+## N.B.  There are pretty severe limits on what can portably be tested
+## in the base class.  Specifically, don't do anything that will send
+## actual compile and link commands to the shell as that won't work
+## without the platform-specific overrides.
 
 # XXX protect from user CC as we mock everything here
 local $ENV{CC};
@@ -56,7 +54,11 @@ isa_ok( $base, 'ExtUtils::CBuilder::Base' );
     );
 }
 
+SKIP:
 {
+    skip "Base doesn't know about override on VMS", 1
+	if $^O eq 'VMS';
+
     my $path_to_perl = 'foobar';
     local $^X = $path_to_perl;
     # %Config is read-only.  We cannot assign to it and we therefore cannot
@@ -81,7 +83,7 @@ isa_ok( $base, 'ExtUtils::CBuilder::Base' );
 
 {
     $cwd = cwd();
-    my $tdir = tempdir();
+    my $tdir = tempdir(CLEANUP => 1);
     chdir $tdir;
     $base = ExtUtils::CBuilder::Base->new();
     ok( $base, "ExtUtils::CBuilder::Base->new() returned true value" );
@@ -138,48 +140,8 @@ is( $base->object_file($source_file),
     "object_file(): got expected automatically assigned name for object file"
 );
 
-# object filename explicitly assigned
-$object_file = File::Spec->catfile('t', 'my_special_compilet.o' );
-is( $object_file,
-    $base->compile(
-        source      => $source_file,
-        object_file => $object_file,
-    ),
-    "compile(): returned object file with specified name"
-);
-
-$lib_file = $base->lib_file($object_file);
-ok( $lib_file, "lib_file() returned true value" );
-
 my ($lib, @temps);
-($lib, @temps) = $base->link(
-    objects     => $object_file,
-    module_name => 'compilet',
-);
-$lib =~ tr/"'//d; #"
-is($lib_file, $lib, "lib_file(): got expected value for $lib");
 
-($lib, @temps) = $base->link(
-    objects     => [ $object_file ],
-    module_name => 'compilet',
-);
-$lib =~ tr/"'//d; #"
-is($lib_file, $lib, "lib_file(): got expected value for $lib");
-
-($lib, @temps) = $base->link(
-    lib_file    => $lib_file,
-    objects     => [ $object_file ],
-    module_name => 'compilet',
-);
-$lib =~ tr/"'//d; #"
-is($lib_file, $lib, "lib_file(): got expected value for $lib");
-
-$lib = $base->link(
-    objects     => $object_file,
-    module_name => 'compilet',
-);
-$lib =~ tr/"'//d; #"
-is($lib_file, $lib, "lib_file(): got expected value for $lib");
 
 {
     local $ENV{PERL_CORE} = '' unless $ENV{PERL_CORE};
@@ -196,24 +158,6 @@ isa_ok( $base, 'ExtUtils::CBuilder::Base' );
 $source_file = File::Spec->catfile('t', 'compilet.c');
 create_c_source_file($source_file);
 ok(-e $source_file, "source file '$source_file' created");
-$object_file = File::Spec->catfile('t', 'my_special_compilet.o' );
-is( $object_file,
-    $base->compile(
-        source      => $source_file,
-        object_file => $object_file,
-        defines     => { alpha => 'beta', gamma => 'delta' },
-    ),
-    "compile() completed when 'defines' provided; returned object file with specified name"
-);
-
-my $exe_file = $base->exe_file($object_file);
-my $ext = $base->{config}{_exe};
-my $expected = File::Spec->catfile('t', qq|my_special_compilet$ext| );
-is(
-    $exe_file,
-    $expected,
-    "exe_file(): returned expected name of executable"
-);
 
 my %args = ();
 my @defines = $base->arg_defines( %args );
@@ -275,7 +219,7 @@ is_deeply( \%split_seen, \%exp,
 
 {
     $cwd = cwd();
-    my $tdir = tempdir();
+    my $tdir = tempdir(CLEANUP => 1);
     my $subdir = File::Spec->catdir(
         $tdir, qw| alpha beta gamma delta epsilon 
             zeta eta theta iota kappa lambda |
@@ -318,7 +262,7 @@ is_deeply( \%split_seen, \%exp,
     touch_file($exporter);
     $rv = $base->perl_src();
     ok( -d $rv, "perl_src(): returned a directory" );
-    is( $rv, Cwd::realpath($subdir), "perl_src(): identified directory" );
+    is( uc($rv), uc(Cwd::realpath($subdir)), "perl_src(): identified directory" );
     is( $capture, q{}, "perl_src(): no warning, as expected" );
 
     chdir $cwd
@@ -385,6 +329,7 @@ is_deeply( $mksymlists_args,
 #####
 
 for ($source_file, $object_file, $lib_file) {
+  next unless defined $_;
   tr/"'//d; #"
   1 while unlink;
 }
