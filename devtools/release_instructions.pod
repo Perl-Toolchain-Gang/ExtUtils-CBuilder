@@ -11,45 +11,53 @@ need with:
 
 =head2 Updating from bleadperl
 
-Any changes in the perl blead repository need to be synchronized to
-the EU::CB repostory.  You can generate a diff using the F<bleadcheck.pl>
-tool.  Assuming your bleadperl repository is F<~/git/perl>, run this command
-from the top level of the EU::CB repo:
+From the bleadperl repo, generate patch emails in the EU::CB repo directory.
+Look in the F<devtools/last-commit> file for a commit ID to sync from.  E.g.
+assuming EU::CB repo directory is F<~/git/extutils-cbuilder>:
+
+  $ git format-patch -o ~/git/extutils-cbuilder cbf59d5a \
+    -- dist/ExtUtils-CBuilder
+
+Change to the EU::CB repo and apply the patch emails:
+
+  $ cd ~/git/extutils-cbuilder
+  $ git am -p 3 -s 000*
+
+Confirm that you are in sync with blead using the F<bleadcheck.pl> tool.
+Assuming your bleadperl repository is F<~/git/perl>, run this command from the
+top level of the EU::CB repo:
 
   $ perl devtools/bleadcheck.pl ~/git/perl
 
-If the version number has changed, update it in F<dist.ini>.
+If everything is in sync, there will be no output except for the commit ID
+of the perl repo HEAD.  Record that in F<devtools/last-commit>:
 
-=head2 Testing and committing.
+  $ perl devtools/bleadcheck.pl ~/git/perl > devtools/last-commit
+
+Update the Changes file for any commits that were made.  Then delete
+the 000* patch files.
+
+=head2 Testing
 
 You can run tests with C<dzil test> and release tests with C<dzil xtest>.
-If all tests pass, check in the changes to the repository.  Be sure to
-add any new files.
 
   $ dzil test
   $ dzil xtest
-  $ git status
-  $ git add .
-
-Confirm that you are in sync:
-
-  $ perl devtools/bleadcheck.pl ~/git/perl
-
-Take note of the commit ID and use it in the commit message
-
-  $ git commit -m "Updating from bleadperl commit 435aa301"
 
 If tests fail, you *must* submit changes upstream in the bleadperl repository
 and then resynchronize from blead.
 
 =head2 Packaging and shipping
 
-Update the Changes file with a summary of changes from blead and add a
-timestamp for release, then commit it.
+Make sure the EU::CB version number has been updated since the last release.
+If not, change it (for all EU::CB modules) in blead and then merge in the 
+change as above.
 
-  $ $EDITOR Changes
+Update the Changes file with a timestamp for release, then commit it.
+
+  $ vim Changes
   $ git add Changes
-  $ git commit -m "Updated Changes"
+  $ git commit -m "timestamp Changes for release"
 
 Check what the final distribution will look like:
 
@@ -67,7 +75,7 @@ correct version, of course).
   $ git tag -m "release XX.YY" release-XX.YY
 
 Then update the F<Porting/Maintainers.pl> file in the Perl 5 source with
-the new tarball number.
+the new tarball version number.
 
 =cut
 
