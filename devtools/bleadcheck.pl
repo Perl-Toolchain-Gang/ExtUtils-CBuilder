@@ -27,7 +27,7 @@ my $commit = do { local (@ARGV, $/) = catfile($blead, '.git', $ref); <> };
 
 $commit = substr($commit, 0, 8);
 
-print STDERR "Comparing with $commit\n";
+print "$commit\n";
 
 my $upstream = catdir($blead, qw/dist ExtUtils-CBuilder/);
 
