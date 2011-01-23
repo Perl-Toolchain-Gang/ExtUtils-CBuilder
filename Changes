@@ -1,6 +1,6 @@
 Revision history for Perl extension ExtUtils::CBuilder.
 
-0.280202 -
+0.280202 - Sun Jan 23 10:47:51 EST 2011
 
   - Different file names used for test files; allows EU::CB tests
     to be run in parallel. [Florian Ragwitz]
