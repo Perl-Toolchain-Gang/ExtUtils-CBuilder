@@ -35,7 +35,10 @@ of the perl repo HEAD.  Record that in F<devtools/last-commit>:
   $ perl devtools/bleadcheck.pl ~/git/perl > devtools/last-commit
 
 Update the Changes file for any commits that were made.  Then delete
-the 000* patch files.
+the 000* patch files.  Commit the F<Changes> and F<last-commit> files.
+
+  $ git add Changes last-commit
+  $ git commit -m "Updated Changes and last-commit"
 
 =head2 Testing
 
