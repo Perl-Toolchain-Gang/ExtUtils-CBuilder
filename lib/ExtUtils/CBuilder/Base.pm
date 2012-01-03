@@ -64,7 +64,7 @@ sub new {
     }
     unless ( exists $self->{config}{cxx} ) {
       $self->{config}{cxx} = $self->{config}{cc};
-      my $cflags = $self->{config}{cflags};
+      my $cflags = $self->{config}{ccflags};
       $self->{config}{cxxflags} = '-x c++';
       $self->{config}{cxxflags} .= " $cflags" if defined $cflags;
     }
