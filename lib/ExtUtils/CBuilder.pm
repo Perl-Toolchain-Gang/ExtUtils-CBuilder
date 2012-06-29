@@ -137,6 +137,10 @@ tempdir or, if that fails for some reason, in the current directory.
 
 Just like have_compiler but for C++ instead of C.
 
+=item have_c99
+
+Just like have_compiler but for C99 instead of ANSI C.
+
 =item compile
 
 Compiles a C source file and produces an object file.  The name of the
