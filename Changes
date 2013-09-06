@@ -1,5 +1,12 @@
 Revision history for Perl extension ExtUtils::CBuilder.
 
+0.280210 - 2013-09-06
+
+  Fixed:
+
+  - Update INSTALLDIRS to favor installation under 'site' (perl 116479)
+    [James E Keenan]
+
 0.280209 - 2012-10-20 (Perl v5.17.5)
 
   Fixed:
