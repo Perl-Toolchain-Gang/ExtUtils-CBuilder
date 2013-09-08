@@ -1,3 +1,5 @@
+*** DO NOT SUBMIT PULL REQUESTS OR ISSUES TO THIS REPOSITORY ***
+
 ExtUtils::CBuilder is now maintained as part of the Perl 5 source.  This
 repository exists to coordinate dual-life CPAN releases only.
 
