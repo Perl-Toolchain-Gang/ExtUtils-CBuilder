@@ -1,5 +1,63 @@
 Revision history for Perl extension ExtUtils::CBuilder.
 
+0.280210 - 2013-09-06
+
+  Fixed:
+
+  - Update INSTALLDIRS to favor installation under 'site' (perl 116479)
+    [James E Keenan]
+
+0.280209 - 2012-10-20 (Perl v5.17.5)
+
+  Fixed:
+
+  - Allow options to be passed to prelink in Windows (perl #115100)
+    [Eric Brine]
+
+0.280208 - 2012-06-20 (Perl v5.17.1)
+
+  Fixed:
+
+  - Corrected location in which manifest file is looked for on
+    Windows (RT#35943, perl #111798) [snaury@gmail.com]
+
+0.280207 (Not released)
+
+  Fixed:
+
+  - Corrected test for existence of manifest file on Windows
+    (perl #111782) [Steve Hay]
+
+0.280206 - 2012-03-20 (Perl v5.15.9)
+
+  Documented:
+
+  - Added a SUPPORT section to indicate that upstream is Perl 5 core
+
+0.280205 - 2011-12-20 (Perl v5.15.6)
+
+  Fixed:
+
+  - Fixed bug picking up ccflags from Config
+
+0.280204 - 2011-06-20 (Perl v5.15.0)
+
+  Minor:
+
+  - Quotation style cleanup
+
+0.280203 - 2011-05-14 (Perl v5.14.0)
+
+  Fixed:
+
+  - Appends CFLAGS and LDFLAGS environments instead of overriding
+
+  - Reset ccflags on compilation for VMS.
+
+  Changed:
+
+  - Refactored OS name mapping to use Perl::OSType
+
 0.280202 - Sun Jan 23 10:47:51 EST 2011
 
   - Different file names used for test files; allows EU::CB tests
