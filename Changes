@@ -5,7 +5,7 @@ Revision history for Perl extension ExtUtils::CBuilder.
   Fixed:
 
   - Missing dependency Perl::OSType [Leon Timmermans]
-  - Fixed repository location [Alberto Simıes]
+  - Fixed repository location [Alberto Sim√µes]
 
 0.280210 - 2013-09-06
 
@@ -145,7 +145,7 @@ Revision history for Perl extension ExtUtils::CBuilder.
 
  Bugs fixed:
  - compile() now accepts both string & array for 'include_dirs'
-   argument, as documented.(RT#54606) [Alberto Simıes]
+   argument, as documented.(RT#54606) [Alberto Sim√µes]
 
 0.27 - Thu Oct 29 21:29:56 EDT 2009
 
