@@ -1,5 +1,7 @@
 Revision history for Perl extension ExtUtils::CBuilder.
 
+0.280217 - 2014-08-22
+
   Fixed:
 
   - Quoted perl path for Windows support #98245 [Alberto Simões] 
