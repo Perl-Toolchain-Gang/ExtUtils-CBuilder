@@ -64,7 +64,7 @@ sub format_linker_cmd {
   }
 
   push( @{$spec{startup}}, 'c0d32.obj' )
-    unless ( $spec{starup} && @{$spec{startup}} );
+    unless ( $spec{startup} && @{$spec{startup}} );
 
   %spec = $self->write_linker_script(%spec)
     if $spec{use_scripts};
