@@ -9,9 +9,6 @@ use Text::ParseWords;
 use IPC::Cmd qw(can_run);
 use File::Temp qw(tempfile);
 
-use vars qw($VERSION);
-$VERSION = '0.280216';
-
 # More details about C/C++ compilers:
 # http://developers.sun.com/sunstudio/documentation/product/compiler.jsp
 # http://gcc.gnu.org/

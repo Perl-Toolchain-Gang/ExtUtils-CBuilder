@@ -4,9 +4,8 @@ use strict;
 use ExtUtils::CBuilder::Platform::Unix;
 use File::Spec;
 
-use vars qw($VERSION @ISA);
+use vars qw(@ISA);
 @ISA = qw(ExtUtils::CBuilder::Platform::Unix);
-$VERSION = '0.280216';
 
 sub link_executable {
   my $self = shift;

@@ -5,9 +5,7 @@ use File::Path ();
 use File::Basename ();
 use Perl::OSType qw/os_type/;
 
-use vars qw($VERSION @ISA);
-$VERSION = '0.280217';
-$VERSION = eval $VERSION;
+use vars qw(@ISA);
 
 # We only use this once - don't waste a symbol table entry on it.
 # More importantly, don't make it an inheritable method.

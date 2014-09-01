@@ -3,8 +3,7 @@ package ExtUtils::CBuilder::Platform::os2;
 use strict;
 use ExtUtils::CBuilder::Platform::Unix;
 
-use vars qw($VERSION @ISA);
-$VERSION = '0.280216';
+use vars qw(@ISA);
 @ISA = qw(ExtUtils::CBuilder::Platform::Unix);
 
 sub need_prelink { 1 }

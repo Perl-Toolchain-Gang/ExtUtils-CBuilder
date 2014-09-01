@@ -3,8 +3,7 @@ package ExtUtils::CBuilder::Platform::VMS;
 use strict;
 use ExtUtils::CBuilder::Base;
 
-use vars qw($VERSION @ISA);
-$VERSION = '0.280216';
+use vars qw(@ISA);
 @ISA = qw(ExtUtils::CBuilder::Base);
 
 use File::Spec::Functions qw(catfile catdir);
