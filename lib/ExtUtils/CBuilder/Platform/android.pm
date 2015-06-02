@@ -3,6 +3,7 @@ package ExtUtils::CBuilder::Platform::android;
 use strict;
 use File::Spec;
 use ExtUtils::CBuilder::Platform::Unix;
+use Config;
 
 use vars qw(@ISA);
 @ISA = qw(ExtUtils::CBuilder::Platform::Unix);
