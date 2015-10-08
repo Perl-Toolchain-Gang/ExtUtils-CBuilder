@@ -1,5 +1,6 @@
 package ExtUtils::CBuilder::Platform::aix;
 
+use warnings;
 use strict;
 use ExtUtils::CBuilder::Platform::Unix;
 use File::Spec;

@@ -1,5 +1,8 @@
 package ExtUtils::CBuilder::Platform::Windows::BCC;
 
+use strict;
+use warnings;
+
 sub format_compiler_cmd {
   my ($self, %spec) = @_;
 

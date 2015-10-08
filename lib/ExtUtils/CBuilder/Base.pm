@@ -1,5 +1,6 @@
 package ExtUtils::CBuilder::Base;
 use strict;
+use warnings;
 use File::Spec;
 use File::Basename;
 use Cwd ();

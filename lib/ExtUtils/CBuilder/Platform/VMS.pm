@@ -1,4 +1,6 @@
 package ExtUtils::CBuilder::Platform::VMS;
+
+use warnings;
 use strict;
 use ExtUtils::CBuilder::Base;
 

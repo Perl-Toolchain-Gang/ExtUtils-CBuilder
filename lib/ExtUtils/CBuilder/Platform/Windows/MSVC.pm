@@ -1,5 +1,8 @@
 package ExtUtils::CBuilder::Platform::Windows::MSVC;
 
+use warnings;
+use strict;
+
 sub arg_exec_file {
   my ($self, $file) = @_;
   return "/OUT:$file";

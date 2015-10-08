@@ -1,5 +1,6 @@
 package ExtUtils::CBuilder::Platform::os2;
 
+use warnings;
 use strict;
 use ExtUtils::CBuilder::Platform::Unix;
 

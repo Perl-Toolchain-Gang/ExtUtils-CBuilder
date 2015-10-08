@@ -1,5 +1,6 @@
 package ExtUtils::CBuilder::Platform::dec_osf;
 
+use warnings;
 use strict;
 use ExtUtils::CBuilder::Platform::Unix;
 use File::Spec;

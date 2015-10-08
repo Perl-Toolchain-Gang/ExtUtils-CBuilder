@@ -1,5 +1,6 @@
 package ExtUtils::CBuilder::Platform::cygwin;
 
+use warnings;
 use strict;
 use File::Spec;
 use ExtUtils::CBuilder::Platform::Unix;
