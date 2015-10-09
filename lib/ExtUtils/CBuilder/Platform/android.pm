@@ -1,5 +1,6 @@
 package ExtUtils::CBuilder::Platform::android;
 
+use warnings;
 use strict;
 use File::Spec;
 use ExtUtils::CBuilder::Platform::Unix;
