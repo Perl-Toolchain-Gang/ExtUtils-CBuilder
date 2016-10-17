@@ -175,10 +175,8 @@ sub compile {
   return $object_file;
 }
 
-sub have_compiler {
-  my ($self, $is_cplusplus) = @_;
-  my $have_compiler_flag = $is_cplusplus ? "have_cxx" : "have_cc";
-  my $suffix = $is_cplusplus ? ".cc" : ".c";
+sub _have_compiler {
+  my ($self, $have_compiler_flag, $suffix, $src) = @_;
   return $self->{$have_compiler_flag} if defined $self->{$have_compiler_flag};
 
   my $result;
@@ -189,19 +187,14 @@ sub have_compiler {
   my ( $FH, $tmpfile ) = tempfile( "compilet-XXXXX", SUFFIX => $suffix );
   binmode $FH;
 
-  if ( $is_cplusplus ) {
-    print $FH "class Bogus { public: int boot_compilet() { return 1; } };\n";
-  }
-  else {
-    print $FH "int boot_compilet() { return 1; }\n";
-  }
+  print $FH $src;
   close $FH;
 
   my ($obj_file, @lib_files);
   eval {
     local $^W = 0;
     local $self->{quiet} = 1;
-    $obj_file = $self->compile('C++' => $is_cplusplus, source => $tmpfile);
+    $obj_file = $self->compile('C++' => $suffix eq '.cc' ? 1 : 0, source => $tmpfile);
     @lib_files = $self->link(objects => $obj_file, module_name => 'compilet');
   };
   $result = $@ ? 0 : 1;
@@ -213,9 +206,33 @@ sub have_compiler {
   return $self->{$have_compiler_flag} = $result;
 }
 
+sub have_compiler {
+  my ($self, $is_cplusplus) = @_;
+  if ($is_cplusplus) {
+    $self->_have_compiler('have_cxx', '.cc', "class Bogus { public: int boot_compilet() { return 1; } };\n");
+  } else {
+    $self->_have_compiler('have_cc', '.c', "int boot_compilet() { return 1; }\n");
+  }
+}
+
 sub have_cplusplus {
   push @_, 1;
   goto &have_compiler;
+}
+
+sub have_c99 {
+  my $self = shift;
+  $self->_have_compiler('have_c99', '.c', <<'C99');
+// include a C99 header
+#include <stdbool.h>
+inline // a C99 keyword with C99 style comments
+int test_c99() {
+    int i = 0;
+    i++;
+    int j = i - 1; // another C99 feature: declaration after statement
+    return j;
+}
+C99
 }
 
 sub lib_file {
