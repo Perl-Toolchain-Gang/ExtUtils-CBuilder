@@ -44,14 +44,16 @@ sub new {
      if defined $ENV{LDFLAGS};
 
   unless ( exists $self->{config}{cxx} ) {
-    my ($ccpath, $ccbase, $ccsfx ) = fileparse($self->{config}{cc}, qr/\.[^.]*/);
+    my ($ccbase, $ccpath, $ccsfx ) = fileparse($self->{config}{cc}, qr/\.[^.]*/);
     foreach my $cxx (@{$cc2cxx{$ccbase}}) {
-      if( can_run( File::Spec->catfile( $ccpath, $cxx, $ccsfx ) ) ) {
-        $self->{config}{cxx} = File::Spec->catfile( $ccpath, $cxx, $ccsfx );
+      my $cxx1 = File::Spec->catfile( $ccpath, $cxx ) . $ccsfx;
+      if( can_run( $cxx1 ) ) {
+        $self->{config}{cxx} = $cxx1;
 	last;
       }
-      if( can_run( File::Spec->catfile( $cxx, $ccsfx ) ) ) {
-        $self->{config}{cxx} = File::Spec->catfile( $cxx, $ccsfx );
+      my $cxx2 = $cxx . $ccsfx;
+      if( can_run( $cxx2 ) ) {
+        $self->{config}{cxx} = $cxx2;
 	last;
       }
       if( can_run( $cxx ) ) {
