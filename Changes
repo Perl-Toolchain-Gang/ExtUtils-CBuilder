@@ -1,5 +1,12 @@
 Revision history for Perl extension ExtUtils::CBuilder.
 
+0.282225 - 2017-07-14
+
+  Enhancements:
+
+  - Fix C++ compiler detection (RT #131749)
+    (thanks to stphnlyd)
+
 0.282224 - 2015-10-09
 
   Enhncements:
