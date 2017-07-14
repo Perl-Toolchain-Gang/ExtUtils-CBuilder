@@ -46,7 +46,7 @@ sub new {
   unless ( exists $self->{config}{cxx} ) {
     my ($ccbase, $ccpath, $ccsfx ) = fileparse($self->{config}{cc}, qr/\.[^.]*/);
     foreach my $cxx (@{$cc2cxx{$ccbase}}) {
-      my $cxx1 = File::Spec->catfile( $ccpath, $cxx ) . $ccsfx;
+      my $cxx1 = File::Spec->catfile( $ccpath, $cxx . $ccsfx);
       if( can_run( $cxx1 ) ) {
         $self->{config}{cxx} = $cxx1;
 	last;
