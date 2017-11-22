@@ -4,8 +4,8 @@ use warnings;
 use strict;
 use ExtUtils::CBuilder::Platform::Unix;
 
-use vars qw(@ISA);
-@ISA = qw(ExtUtils::CBuilder::Platform::Unix);
+# VERSION
+our @ISA = qw(ExtUtils::CBuilder::Platform::Unix);
 
 sub compile {
   my $self = shift;

@@ -7,7 +7,8 @@ use Perl::OSType qw/os_type/;
 
 use warnings;
 use strict;
-use vars qw(@ISA);
+# VERSION
+our @ISA;
 
 # We only use this once - don't waste a symbol table entry on it.
 # More importantly, don't make it an inheritable method.

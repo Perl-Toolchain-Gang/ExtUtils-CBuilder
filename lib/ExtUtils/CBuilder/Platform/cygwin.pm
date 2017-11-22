@@ -5,8 +5,8 @@ use strict;
 use File::Spec;
 use ExtUtils::CBuilder::Platform::Unix;
 
-use vars qw(@ISA);
-@ISA = qw(ExtUtils::CBuilder::Platform::Unix);
+# VERSION
+our @ISA = qw(ExtUtils::CBuilder::Platform::Unix);
 
 # TODO: If a specific exe_file name is requested, if the exe created
 # doesn't have that name, we might want to rename it.  Apparently asking

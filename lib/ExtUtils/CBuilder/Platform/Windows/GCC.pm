@@ -1,5 +1,7 @@
 package ExtUtils::CBuilder::Platform::Windows::GCC;
 
+# VERSION
+
 use warnings;
 use strict;
 

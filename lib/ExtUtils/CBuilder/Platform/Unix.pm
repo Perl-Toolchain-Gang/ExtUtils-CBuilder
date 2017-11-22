@@ -4,8 +4,8 @@ use warnings;
 use strict;
 use ExtUtils::CBuilder::Base;
 
-use vars qw(@ISA);
-@ISA = qw(ExtUtils::CBuilder::Base);
+# VERSION
+our @ISA = qw(ExtUtils::CBuilder::Base);
 
 sub link_executable {
   my $self = shift;
