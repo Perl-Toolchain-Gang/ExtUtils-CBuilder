@@ -50,7 +50,7 @@ sub new {
     my ($ccbase, $ccpath, $ccsfx ) = fileparse($self->{config}{cc}, qr/\.[^.]*/);
 
     ## If the path is just "cc", fileparse returns $ccpath as "./"
-    $ccpath = "" if $self->{config}{cc} =~ /^$ccbase$ccsfx$/;
+    $ccpath = "" if $self->{config}{cc} =~ /^\Q$ccbase$ccsfx\E$/;
       
     foreach my $cxx (@{$cc2cxx{$ccbase}}) {
       my $cxx1 = File::Spec->catfile( $ccpath, $cxx . $ccsfx);
