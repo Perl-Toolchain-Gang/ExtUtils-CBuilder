@@ -5,6 +5,7 @@ use strict;
 use ExtUtils::CBuilder::Base;
 
 # VERSION
+
 our @ISA = qw(ExtUtils::CBuilder::Base);
 
 sub link_executable {
