@@ -318,6 +318,7 @@ sub _do_link {
       if $args{lddl} && $self->need_prelink;
 
   my @linker_flags = (
+    $self->split_like_shell($cf->{ldflags}),
     $self->split_like_shell($args{extra_linker_flags}),
     $self->extra_link_args_after_prelink(
        %args, dl_name => $args{module_name}, prelink_res => \@temp_files
