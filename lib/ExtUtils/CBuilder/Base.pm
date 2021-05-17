@@ -6,7 +6,7 @@ use File::Basename;
 use Cwd ();
 use Config;
 use Text::ParseWords;
-use IPC::Cmd qw(can_run);
+use ExtUtils::MakeMaker ();
 use File::Temp qw(tempfile);
 
 # VERSION
@@ -56,18 +56,18 @@ sub new {
     foreach my $cxx (@{$cc2cxx{$ccbase}}) {
       my $cxx1 = File::Spec->catfile( $ccpath, $cxx . $ccsfx);
 
-      if( can_run( $cxx1 ) ) {
+      if( MM->can_run( $cxx1 ) ) {
         $self->{config}{cxx} = $cxx1;
 	last;
       }
       my $cxx2 = $cxx . $ccsfx;
 
-      if( can_run( $cxx2 ) ) {
+      if( MM->can_run( $cxx2 ) ) {
         $self->{config}{cxx} = $cxx2;
 	last;
       }
 
-      if( can_run( $cxx ) ) {
+      if( MM->can_run( $cxx ) ) {
         $self->{config}{cxx} = $cxx;
 	last;
       }
